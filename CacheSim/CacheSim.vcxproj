@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="setup.conf" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CacheClass.h" />

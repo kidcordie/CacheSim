@@ -9,6 +9,7 @@ public:
 	int getAssociativity();
 	int getHitTime();
 	int getMissTime();
+	~Cache();
 
 protected:
 	int cachesize;
@@ -16,6 +17,10 @@ protected:
 	int associativity;
 	int hittime;
 	int misstime;
+	int index_size;
+	int bo_size;
+	int tag_size;
+	int* cache;
 };
 
 class L2Cache : public Cache

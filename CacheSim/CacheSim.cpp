@@ -7,15 +7,74 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	if (argc != 3)
+	int bs1 = 32;
+	int cs1 = 8192;
+	int assoc1 = 1;
+	int ht1 = 1;
+	int mt1 = 1;
+	int bs2 = 64;
+	int cs2 = 32768;
+	int assoc2 = 1;
+	int ht2 = 8;
+	int mt2 = 10;
+	int tt2 = 10;
+	int bw2 = 16;
+	if (argc != 2)
 	{
-		cout << "usage: please enter cachesize and block size at commmand line" << endl;
+		cout << "usage: please enter config file location at commmand line" << endl;
 		exit(-1);
 	}
-	int cs = atoi(argv[1]);
-	int bs = atoi(argv[2]);
-	Cache L1 = Cache(cs, bs, 1, 1, 1);
-	L2Cache L2 = L2Cache(cs, bs, 1, 1, 1, 1, 1);
+	string file_location = argv[1];
+	cout << file_location;
+	ifstream conf_file(file_location);
+
+	string line;
+	if (!conf_file.is_open()) {
+		cout << "Config file could not be opened using default values" << endl;
+	}
+	else {
+		while (getline(conf_file, line))
+		{
+			istringstream conf_line(line);
+			string key;
+			if (getline(conf_line, key, '='))
+			{
+				string value;
+				if (getline(conf_line, value)) {
+					cout << "setting value: " << key << endl;
+					if (key == "L1_block_size")
+						bs1 = stoi(value);
+					else if (key == "L1_cache_size")
+						cs1 = stoi(value);
+					else if (key == "L1_assoc")
+						assoc1 = stoi(value);
+					else if (key == "L1_hit_time")
+						ht1 = stoi(value);
+					else if (key == "L1_miss_time")
+						mt1 = stoi(value);
+					else if (key == "L2_block_size")
+						bs2 = stoi(value);
+					else if (key == "L2_cache_size")
+						cs2 = stoi(value);
+					else if (key == "L2_assoc")
+						assoc2 = stoi(value);
+					else if (key == "L2_hit_time")
+						ht2 = stoi(value);
+					else if (key == "L2_miss_time")
+						mt2 = stoi(value);
+					else if (key == "L2_transfer_time")
+						tt2 = stoi(value);
+					else if (key == "L2_bus_width")
+						bw2 = stoi(value);
+					else
+						cout << "no key found " << key << endl;
+				}
+			}
+		}
+	}
+	conf_file.close();
+	Cache* L1 = new Cache(cs1, bs1, assoc1, ht1, mt1);
+	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, 1, 1);
 	char op;
 	unsigned long long int address;
 	unsigned int bytesize;
@@ -44,5 +103,7 @@ int main(int argc, char* argv[])
 		bytesize = stoi(new_string);
 		cout << op << " " << hex << address << " " << bytesize << endl;
 	}
+	delete(L1);
+	delete(L2);
     return 0;
 }
