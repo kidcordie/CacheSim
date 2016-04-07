@@ -1,5 +1,15 @@
 #pragma once
 
+class VictimCache
+{
+public:
+	VictimCache(int bo);
+protected:
+	int block_offset;
+	int bo_size;
+	int tag_size;
+};
+
 class Cache
 {
 public:
@@ -21,6 +31,7 @@ protected:
 	int bo_size;
 	int tag_size;
 	int* cache;
+	VictimCache* VC;
 };
 
 class L2Cache : public Cache
