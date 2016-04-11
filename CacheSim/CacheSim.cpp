@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "CacheClass.h"
 
 using namespace std;
 
@@ -19,18 +20,22 @@ int main(int argc, char* argv[])
 	int mt2 = 10;
 	int tt2 = 10;
 	int bw2 = 16;
+	int numSets1;
+	int keepTrack = 0;
+
 	if (argc != 2)
 	{
-		cout << "usage: please enter config file location at commmand line" << endl;
+		cout << "usage: please enter config file location at command line" << endl;
 		exit(-1);
 	}
 	string file_location = argv[1];
 	cout << file_location;
 	ifstream conf_file(file_location);
 
+    //conf_file.open(file_location);
 	string line;
 	if (!conf_file.is_open()) {
-		cout << "Config file could not be opened using default values" << endl;
+		cout << " Config file could not be opened using default values" << endl;
 	}
 	else {
 		while (getline(conf_file, line))
@@ -74,7 +79,7 @@ int main(int argc, char* argv[])
 	}
 	conf_file.close();
 	L1Cache* L1 = new L1Cache(cs1, bs1, assoc1, ht1, mt1);
-	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, tt2, bw2);
+	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, 1, 1);
 	char op;
 	unsigned long long int address;
 	unsigned int bytesize;
@@ -102,8 +107,25 @@ int main(int argc, char* argv[])
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
 		cout << op << " " << hex << address << " " << bytesize << endl;
-		L1->parseRequest(op, address, bytesize);
 	}
+
+	//find number of sets
+	numSets1 = cs1/(bs1*assoc1);
+    LRU obj;
+	//here is where you would make stack that is numSets long of tag pointers that can be referenced by index
+	for(int i=0; i<numSets1; i++)
+    {
+        //keepTrack++;
+        //make dummy node for all sets
+        tagNode* dummy = new tagNode;
+        for(int j=0; j<assoc1; j++)
+        {
+            obj.add_tagNode(dummy);
+            dummy = dummy->next;
+            //keepTrack++;
+        }
+
+    }
 	delete(L1);
 	delete(L2);
     return 0;
