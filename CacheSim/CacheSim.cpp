@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	}
 	conf_file.close();
 	L1Cache* L1 = new L1Cache(cs1, bs1, assoc1, ht1, mt1);
-	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, 1, 1);
+	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, tt2, bw2);
 	char op;
 	unsigned long long int address;
 	unsigned int bytesize;
@@ -102,6 +102,7 @@ int main(int argc, char* argv[])
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
 		cout << op << " " << hex << address << " " << bytesize << endl;
+		L1->parseRequest(op, address, bytesize);
 	}
 	delete(L1);
 	delete(L2);
