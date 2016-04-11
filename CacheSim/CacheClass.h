@@ -1,4 +1,14 @@
 #pragma once
+#ifndef CACHECLASS_H
+#define CACHECLASS_H
+
+struct tagNode
+{
+    int tag;
+    int valid = 0;
+    int dirty = 0;
+    tagNode* next = nullptr;
+};
 
 class VictimCache
 {
@@ -55,3 +65,17 @@ protected:
 	int transfertime;
 	int buswidth;
 };
+
+class LRU
+{
+public:
+    LRU();
+     void add_tagNode(tagNode* prev);
+     void mov_tagNode(tagNode* current, tagNode* dummy);
+private:
+
+};
+
+
+#endif // CACHESIM_H
+
