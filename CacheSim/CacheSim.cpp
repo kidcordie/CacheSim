@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	conf_file.close();
-	Cache* L1 = new Cache(cs1, bs1, assoc1, ht1, mt1);
+	L1Cache* L1 = new L1Cache(cs1, bs1, assoc1, ht1, mt1);
 	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, 1, 1);
 	char op;
 	unsigned long long int address;

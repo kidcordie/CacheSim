@@ -1,7 +1,7 @@
 ﻿  stdafx.cpp
   CacheSim.cpp
   CacheClass.cpp
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(11): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(12): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating Code...
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe
