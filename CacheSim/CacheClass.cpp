@@ -15,13 +15,11 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	index_mask = (~(0xffffffffffff << (bo_size + index_size))) - bo_mask;
 	tag_mask = 0xffffffffffff - bo_mask - index_mask;
 	cache = new int[cachesize];
-	VC = new VictimCache(bo_size);
 }
 Cache::~Cache()
 {
 	std::cout << "deleting cache" << std::endl;
 	delete(cache);
-	delete(VC);
 }
 int Cache::getCacheSize()
 {
@@ -93,8 +91,51 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 	//check L2 cache
 }
 
-VictimCache::VictimCache(int bo) 
+LRU::LRU(int ind_size, int assoc)
 {
-	bo_size= bo;
-	tag_size = 64 - bo_size;
+    //here is where you make array that is index long of tag pointers that can be referenced by index
+    lru_array = new tagNode*[ind_size];
+    tagNode* dummy;
+    for(int i=0; i<ind_size; i++)
+    {
+        //make dummy node for all sets
+        dummy = lru_array[i];
+        for(int j=0; j<assoc; j++)
+        {
+            add_tagNode(dummy);
+            dummy = dummy->next;
+        }
+    }
+
+    //victim cache
+    tagNode* vic_dummy;
+    for(int j=0; j<8; j++)
+        {
+            add_tagNode(vic_dummy);
+            vic_dummy = vic_dummy->next;
+        }
 }
+void LRU::add_tagNode(tagNode* prev)  //append a tagNode to the end of an existing node
+{
+    //create a new node
+    tagNode* tmp = new tagNode;
+    prev->next = tmp;
+}
+void LRU::mov_tagNode(tagNode* current, tagNode* dummy)  //takes current tagNode and puts it at the beginning of the LRU
+{
+    tagNode* tmp = dummy;
+    //traverse
+    while(tmp->next != current)
+    {
+        tmp = tmp->next;
+    }
+    tmp->next = current->next;
+    tmp = dummy->next;
+    dummy->next = current;
+    current->next = tmp;
+}
+bool LRU::check_addr(unsigned long long int index, unsigned long long int tag, bool write)
+{
+    return true;
+}
+

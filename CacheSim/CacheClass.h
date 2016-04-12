@@ -1,12 +1,21 @@
 #pragma once
 
-class VictimCache
+struct tagNode
+{
+    unsigned long long int tag;
+    int valid = 0;
+    int dirty = 0;
+    tagNode* next = nullptr;
+};
+class LRU
 {
 public:
-	VictimCache(int bo);
-protected:
-	int bo_size;
-	int tag_size;
+    LRU(int ind_size, int assoc);
+    bool check_addr(unsigned long long int index, unsigned long long int tag, bool write);
+    void mov_tagNode(tagNode* current, tagNode* dummy);
+private:
+    void add_tagNode(tagNode* prev);
+    tagNode** lru_array;
 };
 
 class Cache
@@ -32,7 +41,7 @@ protected:
 	unsigned long long int index_mask;
 	unsigned long long int tag_mask;
 	int* cache;
-	VictimCache* VC;
+	//VictimCache* VC;
 };
 
 class L1Cache : public Cache
