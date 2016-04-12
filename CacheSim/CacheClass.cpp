@@ -14,7 +14,7 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	bo_mask = ~(0xffffffffffffffff << (bo_size));
 	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) - bo_mask;
 	tag_mask = 0xffffffffffffffff - bo_mask - index_mask;
-	cache = new LRU(index_size, assoc);
+	cache = new int[index_size];
 }
 Cache::~Cache()
 {
@@ -45,7 +45,7 @@ int Cache::getMissTime()
 
 L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
 {
-	i_cache = cache = new LRU(index_size, assoc);
+	i_cache = cache = new[index_size];
 }
 
 //Returns Boolean value True if Hit False if Miss
