@@ -104,6 +104,16 @@ int main(int argc, char* argv[])
 		cout << op << " " << hex << address << " " << bytesize << endl;
 		L1->parseRequest(op, address, bytesize);
 	}
+
+	//begin test
+	int tst = cs1/(bs1*assoc1);
+	bool tst_bool;
+	LRU obj(tst, assoc1);
+	//obj.check_addr()
+
+	//end test
+
+
 	delete(L1);
 	delete(L2);
     return 0;
