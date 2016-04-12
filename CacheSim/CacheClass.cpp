@@ -11,11 +11,10 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	//subtract 1 because it takes size-1 bits to represent the size
 	index_size = int(log2f(cs)) - 1;
 	bo_size = int(log2f(bs)) - 1;
-	bo_mask = ~(0xffffffffffff << (bo_size));
-	index_mask = (~(0xffffffffffff << (bo_size + index_size))) - bo_mask;
-	tag_mask = 0xffffffffffff - bo_mask - index_mask;
-	cache = new int[cachesize];
-	VC = new VictimCache(bo_size);
+	bo_mask = ~(0xffffffffffffffff << (bo_size));
+	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) - bo_mask;
+	tag_mask = 0xffffffffffffffff - bo_mask - index_mask;
+	cache = new LRU(index_size, assoc);
 }
 Cache::~Cache()
 {
@@ -46,8 +45,10 @@ int Cache::getMissTime()
 
 L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
 {
-	i_cache = new int[cachesize];
+	i_cache = cache = new LRU(index_size, assoc);
 }
+
+//Returns Boolean value True if Hit False if Miss
 bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned int bytes)
 {
 	unsigned long long int current_tag = (address & tag_mask) >> (bo_size + index_size);
@@ -59,6 +60,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	bool hit = false;
 	if (ref == 'I')
 	{
+
 		return hit;
 		//check i cache
 	}
