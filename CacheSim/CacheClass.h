@@ -31,7 +31,7 @@ protected:
 	unsigned long long int bo_mask;
 	unsigned long long int index_mask;
 	unsigned long long int tag_mask;
-	int* cache;
+	LRU* cache;
 	VictimCache* VC;
 };
 
@@ -41,7 +41,7 @@ public:
 	L1Cache(int cs, int bs, int assoc, int ht, int mt);
 	bool parseRequest(char ref, unsigned long long int address, unsigned int bytes);
 protected:
-	int* i_cache;
+	LRU* i_cache;
 };
 
 class L2Cache : public Cache
