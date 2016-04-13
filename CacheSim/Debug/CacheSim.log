@@ -1,4 +1,3 @@
-﻿  CacheClass.cpp
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(12): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  CacheSim.cpp
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cachesim.cpp(125): warning C4101: 'tst_bool': unreferenced local variable
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe
