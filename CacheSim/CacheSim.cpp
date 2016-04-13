@@ -81,6 +81,9 @@ int main(int argc, char* argv[])
 	string input_line;
 	string new_string = "";
 	unsigned i = 0;
+	int L1hits = 0;
+	int L2hits = 0;
+	int MMaccess = 0;
 	while (getline(cin, input_line))
 	{
 		op = input_line[0];
@@ -102,7 +105,19 @@ int main(int argc, char* argv[])
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
 		cout << op << " " << hex << address << " " << bytesize << endl;
-		L1->parseRequest(op, address, bytesize);
+		if (L1->parseRequest(op, address, bytesize))
+		{
+			L1hits++;
+		}
+		else if (L2->parseRequest(address, bytesize))
+		{
+			L2hits++;
+			cout << "L2 hits: " << L2hits << endl;
+		}
+		else
+		{
+			MMaccess++;
+		}
 	}
 
 	//begin test
@@ -113,7 +128,9 @@ int main(int argc, char* argv[])
 
 	//end test
 
-
+	cout << "L1 hits: " << L1hits << endl;
+	cout << "L2 hits: " << L2hits << endl;
+	cout << "MM accesses: " << MMaccess << endl;
 	delete(L1);
 	delete(L2);
     return 0;
