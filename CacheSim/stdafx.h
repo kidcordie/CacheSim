@@ -6,6 +6,7 @@
 #pragma once
 
 #include "targetver.h"
+#include "LRU.h"
 #include "CacheClass.h"
 #include <stdio.h>
 #include <tchar.h>
