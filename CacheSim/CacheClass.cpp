@@ -52,7 +52,7 @@ int Cache::getMissTime()
 
 L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
 {
-	i_cache = cache = new LRU(cs, associativity);
+	i_cache = new LRU(cs, associativity);
 }
 
 //Returns Boolean value True if Hit False if Miss
