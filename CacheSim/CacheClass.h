@@ -43,6 +43,7 @@ protected:
 	int write_refs=0;
 	int read_refs=0;
 	int inst_refs=0;
+	int realign(unsigned int bo, unsigned int bytes);
 };
 
 class L2Cache : public Cache
