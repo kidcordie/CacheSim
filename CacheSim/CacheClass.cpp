@@ -16,7 +16,7 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) & ~bo_mask;
 	tag_mask = 0xffffffffffffffff & ~(bo_mask | index_mask);
 	cache = new LRU(cs, associativity);
-}	
+}
 
 Cache::~Cache()
 {
@@ -87,13 +87,22 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		//check i cache
 		inst_refs++;
 		hit = i_cache->check_addr(index, tag, write);
+		if(hit)
+            i_hitCnt++;
+        else
+            i_missCnt++;
 	}
 	else
 	{
 		//check d cache
 		if (!write)
 			read_refs++;
+
 		hit = cache->check_addr(index, tag, write);
+		if(hit)
+            d_hitCnt++;
+        else
+            d_missCnt++;
 	}
 	return hit;
 }

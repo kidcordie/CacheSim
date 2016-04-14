@@ -1,4 +1,4 @@
-#include "stdafx.h""
+#include "stdafx.h"
 LRU::LRU(int ind_size, int assoc)
 {
 	//here is where you make array that is index long of tag pointers that can be referenced by index
