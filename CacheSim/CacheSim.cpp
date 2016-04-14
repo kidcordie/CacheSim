@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 			i++;
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
-		cout << op << " " << hex << address << " " << bytesize << endl;
+		cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
 		if (L1->parseRequest(op, address, bytesize))
 		{
 			L1hits++;
