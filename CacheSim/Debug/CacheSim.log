@@ -1,9 +1,10 @@
-﻿  CacheClass.cpp
+﻿  CacheSim.cpp
+  CacheClass.cpp
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(14): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(92): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(95): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(109): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(112): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(127): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe

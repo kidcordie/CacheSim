@@ -124,7 +124,7 @@ int L1Cache::realign(unsigned int bo, unsigned int bytes)
 	int new_bytes = bytes - (4 - start);
 	int transfers = 1;
 	if (new_bytes > 0) {
-		transfers+= std::ceil(float(new_bytes) / 4);
+		transfers+= (new_bytes / 4) + (new_bytes % 4 != 0);
 	}
 	return transfers;
 }
