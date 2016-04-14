@@ -13,8 +13,8 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	index_size = int(log2f(cs/(bs*associativity)));
 	bo_size = int(log2f(bs));
 	bo_mask = ~(0xffffffffffffffff << (bo_size));
-	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) - bo_mask;
-	tag_mask = 0xffffffffffffffff - bo_mask - index_mask;
+	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) & ~bo_mask;
+	tag_mask = 0xffffffffffffffff & ~(bo_mask | index_mask);
 	cache = new LRU(cs, associativity);
 }	
 
