@@ -10,7 +10,7 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	hittime = ht;
 	misstime = mt;
 	//subtract 1 because it takes size-1 bits to represent the size
-	index_size = int(log2f(cs/bs));
+	index_size = int(log2f(cs/(bs*associativity)));
 	bo_size = int(log2f(bs));
 	bo_mask = ~(0xffffffffffffffff << (bo_size));
 	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) - bo_mask;
