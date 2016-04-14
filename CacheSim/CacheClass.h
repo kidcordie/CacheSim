@@ -31,8 +31,14 @@ class L1Cache : public Cache
 public:
 	L1Cache(int cs, int bs, int assoc, int ht, int mt);
 	bool parseRequest(char ref, unsigned long long int address, unsigned int bytes);
+	int getWriteRefs();
+	int getReadRefs();
+	int getInstRefs();
 protected:
 	LRU* i_cache;
+	int write_refs=0;
+	int read_refs=0;
+	int inst_refs=0;
 };
 
 class L2Cache : public Cache

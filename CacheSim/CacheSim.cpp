@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 			{
 				string value;
 				if (getline(conf_line, value)) {
-					cout << "setting value: " << key << endl;
+					//cout << "setting value: " << key << endl;
 					if (key == "L1_block_size")
 						bs1 = stoi(value);
 					else if (key == "L1_cache_size")
@@ -112,7 +112,6 @@ int main(int argc, char* argv[])
 		else if (L2->parseRequest(address, bytesize))
 		{
 			L2hits++;
-			cout << "L2 hits: " << L2hits << endl;
 		}
 		else
 		{
