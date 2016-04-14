@@ -75,7 +75,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
 	unsigned long long int index = (address & index_mask) >> (bo_size);
 	unsigned long long int bo = address & bo_mask;
-	std::cout << "tag: " << std::hex << tag << " index: " << std::hex << index << 
+	std::cout << "tag: " << std::hex << tag << " index: " << std::hex << index <<
 		" Byte offset: " << bo << std::endl;
 	bool hit = false;
 	bool write = false;
