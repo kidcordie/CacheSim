@@ -15,14 +15,22 @@ LRU::LRU(int ind_size, int assoc)
 			dummy = dummy->next;
 		}
 	}
+	//make victim cache
+	vic_dummy = makeVictim();
+}
 
-	//victim cache
-	vic_dummy = new tagNode;
-	for (int j = 0; j<8; j++)
+tagNode* LRU::makeVictim()
+{
+    //victim cache
+    tagNode* vic_node = new tagNode;
+    tagNode* vic_dumb = vic_node;
+
+	for (int j=0; j<8; j++)
 	{
-		add_tagNode(vic_dummy);
-		vic_dummy = vic_dummy->next;
+		add_tagNode(vic_node);
+		vic_node = vic_node->next;
 	}
+	return vic_dumb;
 }
 //append a tagNode to the end of an existing node
 void LRU::add_tagNode(tagNode* prev)
@@ -52,6 +60,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 	bool ret_bit = 0;
 	tagNode* dummy;
 	tagNode* start;
+	tagNode* prev;
 
 	dummy = lru_array[index];
 	start = dummy->next;
@@ -78,46 +87,70 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				break;
 			}
 			else
-				start = start->next; //check next tag_node
+            {
+                prev = start;
+                start = start->next; //check next tag_node
+            }
 		}
 	}
 	if (start == nullptr) //reached the end of the LRU, need to check victim cache
 	{
-		tagNode* vic_start = vic_dummy->next;
-		tagNode* vic_cpy;
-		tagNode* cpy;
+	    std::cout<<"\nyou've reached the depths of hell...\n";
+
+		tagNode* vic_start;
+		tagNode* cpy = new tagNode;
+
+		vic_start = vic_dummy->next;
 		while (vic_start != nullptr)
-		{
+		{ //ENTERS WHILE LOOP
 			if (vic_start->valid == 0)  //miss, write in values
 			{
+			    std::cout<<"\nYou found a miss, valid=0\n";
 				vic_start->valid = 1;
 				vic_start->tag = in_tag;
 				if (write == true)
 					vic_start->dirty = 1;
+                mov_tagNode(vic_start, vic_dummy);
+
+                break;
 			}
 			else
 			{
 				if (vic_start->tag == in_tag)  //hit
 				{
+				    std::cout<<"\nYou found a hit!\n";
 					//SWAP VALUES IN PREV_CACHE LRU
-					//vic_cpy = vic_start;
-					cpy = start;
-					cpy->tag = start->tag;
-					cpy->dirty = start->dirty;
-					start = vic_start;
-					start->tag = vic_start->tag;
-					//dirty bit?
-					vic_start = cpy;
+					cpy = prev;
+					cpy->tag = prev->tag;
+					cpy->dirty = prev->dirty;
+					//set prev info to victim cache info:
+					prev->tag = vic_start->tag;
+					prev->dirty = vic_start->dirty;
+					//set victim cache info to prev info:
 					vic_start->tag = cpy->tag;
 					vic_start->dirty = cpy->dirty;
-					mov_tagNode(start, dummy);
+
+					mov_tagNode(prev, dummy);
+					std::cout<<"mov_tagNode, in main cache\n";
 					mov_tagNode(vic_start, vic_dummy);
+					std::cout<<"mov_tagNode, in victim cache\n";
+					vc_trans++;
+					//delete cpy;
+					break;
 				}
 				else
-					vic_start = vic_start->next;
+                {
+                    vic_start = vic_start->next;
+                    std::cout<<"\nYou found a miss, checking next node.. \n";
+                }
 			}
 		}
+		//delete[] vic_start;
+		delete cpy;
+		std::cout<<"cpy deleted.\n";
 	}
 
+	cunt++;
+	std::cout<<"hit/miss bool count: "<<cunt<<"\n";
 	return ret_bit;
 }
