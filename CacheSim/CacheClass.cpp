@@ -83,6 +83,8 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		write_refs++;
 		write = true;
 	}
+	if (index == 99)
+		index = index;
 	if (ref == 'I')
 	{
 		//check i cache

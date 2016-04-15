@@ -61,7 +61,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 	tagNode* dummy;
 	tagNode* start;
 	tagNode* prev;
-
 	dummy = lru_array[index];
 	start = dummy->next;
 	//traverse through LRU at index
@@ -120,7 +119,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				{
 				    std::cout<<"\nYou found a hit!\n";
 					//SWAP VALUES IN PREV_CACHE LRU
-					cpy = prev;
+					*cpy = *prev;
 					cpy->tag = prev->tag;
 					cpy->dirty = prev->dirty;
 					//set prev info to victim cache info:
