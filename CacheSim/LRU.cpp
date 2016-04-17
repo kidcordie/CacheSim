@@ -1,7 +1,9 @@
 #include "stdafx.h"
-LRU::LRU(int ind_size, int assoc)
+LRU::LRU(int ind_size, int assoc, int index_bits, int block_offset)
 {
 	index_size = ind_size;
+	index_bit_size = index_bits;
+	bo_size = block_offset;
 	//here is where you make array that is index long of tag pointers that can be referenced by index
 	lru_array = new tagNode*[ind_size];
 	tagNode* dummy;
@@ -18,6 +20,33 @@ LRU::LRU(int ind_size, int assoc)
 	}
 	//make victim cache
 	vic_dummy = makeVictim();
+}
+
+LRU::~LRU()
+{
+	tagNode* dummy;
+	tagNode* start;
+	for (unsigned int i = 0; i < index_size; ++i)
+	{
+		dummy = lru_array[i];
+		start = dummy->next;
+		while (start != nullptr) {
+			if (start->valid) {
+				i = i;
+				std::cout << std::hex << i << ": " << std::hex << start->tag << std::endl;
+			}
+			start = start->next;
+		}
+	}
+	start = vic_dummy->next;
+	std::cout << "VC" << std::endl;
+	std::cout << vc_trans << std::endl;
+	while (start != nullptr) {
+		if (start->valid) {
+			std::cout << std::hex << start->tag << std::endl;
+		}
+		start = start->next;
+	}
 }
 
 tagNode* LRU::makeVictim()
@@ -84,7 +113,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			if (start->tag == in_tag) //hit
 			{
 				ret_bit = true;
-				break;
+				return ret_bit;
 			}
 			else
             {
@@ -99,41 +128,44 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 
 		tagNode* vic_start;
 		tagNode* cpy = new tagNode;
-		unsigned long longvic_in_tag = (in_tag << index_size) | index;
+		unsigned long long vic_in_tag = (in_tag << index_bit_size + bo_size) | (index << bo_size);
 		vic_start = vic_dummy->next;
+		//This was loading in the current address instead of the kicked address
 		while (vic_start != nullptr)
 		{ //ENTERS WHILE LOOP
+			std::cout << std::hex << vic_start->tag << std::endl;
 			if (vic_start->valid == 0)  //miss, write in values
 			{
-			    std::cout<<"\nYou found a miss, valid=0\n";
+			    //std::cout<<"\nYou found a miss, valid=0\n";
 				vic_start->valid = 1;
-				vic_start->tag = in_tag;
-				if (write == true)
-					vic_start->dirty = 1;
+				vic_start->tag = (prev->tag << index_bit_size + bo_size) | (index << bo_size);
+				vic_start->dirty = prev->dirty;
                 mov_tagNode(vic_start, vic_dummy);
-
+				prev->tag = in_tag;
+				prev->dirty = int(write);
+				mov_tagNode(prev, dummy);
                 break;
 			}
 			else
 			{
-				if (vic_start->tag == in_tag)  //hit
+				if (vic_start->tag == vic_in_tag)  //hit
 				{
-				    std::cout<<"\nYou found a hit!\n";
+				    //std::cout<<"\nYou found a hit!\n";
 					//SWAP VALUES IN PREV_CACHE LRU
 					*cpy = *prev;
 					cpy->tag = prev->tag;
 					cpy->dirty = prev->dirty;
 					//set prev info to victim cache info:
-					prev->tag = vic_start->tag;
+					prev->tag = in_tag;
 					prev->dirty = vic_start->dirty;
 					//set victim cache info to prev info:
-					vic_start->tag = cpy->tag;
+					vic_start->tag = (cpy->tag << index_bit_size + bo_size) | (index << bo_size);
 					vic_start->dirty = cpy->dirty;
 
 					mov_tagNode(prev, dummy);
-					std::cout<<"mov_tagNode, in main cache\n";
+					//std::cout<<"mov_tagNode, in main cache\n";
 					mov_tagNode(vic_start, vic_dummy);
-					std::cout<<"mov_tagNode, in victim cache\n";
+					//std::cout<<"mov_tagNode, in victim cache\n";
 					vc_trans++;
 					//delete cpy;
 					break;
@@ -141,7 +173,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				else
                 {
                     vic_start = vic_start->next;
-                    std::cout<<"\nYou found a miss, checking next node.. \n";
+                    //std::cout<<"\nYou found a miss, checking next node.. \n";
                 }
 			}
 		}
