@@ -9,7 +9,6 @@ public:
 	int getAssociativity();
 	int getHitTime();
 	int getMissTime();
-	~Cache();
 
 protected:
 	int cachesize;
@@ -30,6 +29,7 @@ class L1Cache : public Cache
 {
 public:
 	L1Cache(int cs, int bs, int assoc, int ht, int mt);
+	~L1Cache();
 	bool parseRequest(char ref, unsigned long long int address, unsigned int bytes);
 	int getWriteRefs();
 	int getReadRefs();
@@ -50,6 +50,7 @@ class L2Cache : public Cache
 {
 public:
 	L2Cache(int cs, int bs, int assoc, int ht, int mt, int tt, int bw);
+	~L2Cache();
 	int getTransferTime();
 	int getBusWidth();
 	bool parseRequest(unsigned long long int address, unsigned int bytes);

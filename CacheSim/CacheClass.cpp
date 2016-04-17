@@ -15,13 +15,7 @@ Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
 	bo_mask = ~(0xffffffffffffffff << (bo_size));
 	index_mask = (~(0xffffffffffffffff << (bo_size + index_size))) & ~bo_mask;
 	tag_mask = 0xffffffffffffffff & ~(bo_mask | index_mask);
-	cache = new LRU(cs, associativity);
-}
-
-Cache::~Cache()
-{
-	std::cout << "deleting cache" << std::endl;
-	delete(cache);
+	cache = new LRU(cs, associativity, index_size, bo_size);
 }
 
 int Cache::getCacheSize()
@@ -52,8 +46,17 @@ int Cache::getMissTime()
 
 L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
 {
-	i_cache = new LRU(cs, associativity);
+	i_cache = new LRU(cs, associativity, index_size, bo_size);
 }
+
+L1Cache::~L1Cache()
+{
+	std::cout << "Memory Level: L1i" << std::endl;
+	delete(i_cache);
+	std::cout << "Memory Level: L1d" << std::endl;
+	delete(cache);
+}
+
 int L1Cache::getWriteRefs()
 {
 	return write_refs;
@@ -135,6 +138,12 @@ L2Cache::L2Cache(int cs, int bs, int assoc, int ht, int mt, int tt, int bw) :Cac
 {
 	transfertime = tt;
 	buswidth = bw;
+}
+
+L2Cache::~L2Cache()
+{
+	std::cout << "Memory Level: L2" << std::endl;
+	delete(cache);
 }
 
 int L2Cache::getTransferTime()

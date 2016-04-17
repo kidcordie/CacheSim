@@ -10,7 +10,8 @@ struct tagNode
 class LRU
 {
 public:
-	LRU(int ind_size, int assoc);
+	LRU(int ind_size, int assoc, int index_bits, int block_offset);
+	~LRU();
 	bool check_addr(unsigned long long int index, unsigned long long int in_tag, bool write);
 	void mov_tagNode(tagNode* current, tagNode* dummy);
 	tagNode* makeVictim();
@@ -22,6 +23,9 @@ public:
 	int cunt=0;
 private:
 	void add_tagNode(tagNode* prev);
+	int index_size;
+	int index_bit_size;
+	int bo_size;
 	tagNode** lru_array;
 	tagNode* vic_dummy;
 };
