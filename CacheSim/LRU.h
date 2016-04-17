@@ -20,7 +20,6 @@ public:
 	int vciMiss_cnt=0;
 	int vcdMiss_cnt=0;
 	int vc_trans=0;
-	int cunt=0;
 private:
 	void add_tagNode(tagNode* prev);
 	int index_size;
