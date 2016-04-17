@@ -13,6 +13,13 @@ public:
 	LRU(int ind_size, int assoc);
 	bool check_addr(unsigned long long int index, unsigned long long int in_tag, bool write);
 	void mov_tagNode(tagNode* current, tagNode* dummy);
+	tagNode* makeVictim();
+	int vciHit_cnt=0;
+	int vcdHit_cnt=0;
+	int vciMiss_cnt=0;
+	int vcdMiss_cnt=0;
+	int vc_trans=0;
+	int cunt=0;
 private:
 	void add_tagNode(tagNode* prev);
 	tagNode** lru_array;
