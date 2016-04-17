@@ -124,8 +124,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 	}
 	if (start == nullptr) //reached the end of the LRU, need to check victim cache
 	{
-	    std::cout<<"\nyou've reached the depths of hell...\n";
-
 		tagNode* vic_start;
 		tagNode* cpy = new tagNode;
 		unsigned long long vic_in_tag = (in_tag << index_bit_size + bo_size) | (index << bo_size);
@@ -136,7 +134,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			std::cout << std::hex << vic_start->tag << std::endl;
 			if (vic_start->valid == 0)  //miss, write in values
 			{
-			    //std::cout<<"\nYou found a miss, valid=0\n";
 				vic_start->valid = 1;
 				vic_start->tag = (prev->tag << index_bit_size + bo_size) | (index << bo_size);
 				vic_start->dirty = prev->dirty;
@@ -150,7 +147,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			{
 				if (vic_start->tag == vic_in_tag)  //hit
 				{
-				    //std::cout<<"\nYou found a hit!\n";
 					//SWAP VALUES IN PREV_CACHE LRU
 					*cpy = *prev;
 					cpy->tag = prev->tag;
@@ -163,9 +159,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 					vic_start->dirty = cpy->dirty;
 
 					mov_tagNode(prev, dummy);
-					//std::cout<<"mov_tagNode, in main cache\n";
 					mov_tagNode(vic_start, vic_dummy);
-					//std::cout<<"mov_tagNode, in victim cache\n";
 					vc_trans++;
 					//delete cpy;
 					break;
@@ -173,13 +167,10 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				else
                 {
                     vic_start = vic_start->next;
-                    //std::cout<<"\nYou found a miss, checking next node.. \n";
                 }
 			}
 		}
-		//delete[] vic_start;
 		delete cpy;
-		std::cout<<"cpy deleted.\n";
 	}
 
 	cunt++;
