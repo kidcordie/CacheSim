@@ -1,6 +1,7 @@
 #include "stdafx.h"
 LRU::LRU(int ind_size, int assoc)
 {
+	index_size = ind_size;
 	//here is where you make array that is index long of tag pointers that can be referenced by index
 	lru_array = new tagNode*[ind_size];
 	tagNode* dummy;
@@ -98,7 +99,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 
 		tagNode* vic_start;
 		tagNode* cpy = new tagNode;
-
+		unsigned long longvic_in_tag = (in_tag << index_size) | index;
 		vic_start = vic_dummy->next;
 		while (vic_start != nullptr)
 		{ //ENTERS WHILE LOOP
@@ -150,6 +151,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 	}
 
 	cunt++;
-	std::cout<<"hit/miss bool count: "<<cunt<<"\n";
+	//std::cout<<"hit/miss bool count: "<<cunt<<"\n";
 	return ret_bit;
 }

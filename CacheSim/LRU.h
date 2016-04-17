@@ -22,6 +22,7 @@ public:
 	int cunt=0;
 private:
 	void add_tagNode(tagNode* prev);
+	int index_size;
 	tagNode** lru_array;
 	tagNode* vic_dummy;
 };
