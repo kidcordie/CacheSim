@@ -1,2 +1,7 @@
-*.VC.opendb 
-*.VC.db 
+*.VC.opendb
+*.VC.db
+*/Debug/*
+*/ipch/*
+*.sln
+*.vcxproj*
+*/.vs/*
