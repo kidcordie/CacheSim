@@ -21,6 +21,8 @@ public:
 	int vcdMiss_cnt=0;
 	int vc_trans=0;
 	int cunt=0;
+	bool dirtyKickout = false;
+	unsigned long long int dirtyAddress;
 private:
 	void add_tagNode(tagNode* prev);
 	int index_size;

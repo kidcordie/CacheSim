@@ -107,6 +107,10 @@ int main(int argc, char* argv[])
 		//cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
 		if (L1->parseRequest(op, address, bytesize))
 		{
+			if (L1->dirtyKickout) {
+				L1->dirtyKickout = false;
+				L2->dirtyWrite(L1->dirtyAddress);
+			}
 			L1hits++;
 		}
 		else if (L2->parseRequest(address, bytesize))
@@ -128,6 +132,8 @@ int main(int argc, char* argv[])
     cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
 	cout << "L1_d hits: " << dec << L1->d_hitCnt << endl;
 	cout << "L1_d misses: " << dec << L1->d_missCnt << endl;
+	cout << "L2 hits: " << dec << L2->hitCnt << endl;
+	cout << "L2 misses: " << dec << L2->missCnt << endl;
 	delete(L1);
 	delete(L2);
     return 0;
