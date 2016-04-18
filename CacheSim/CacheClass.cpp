@@ -46,6 +46,7 @@ int Cache::getMissTime()
 
 L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
 {
+	buswidth = 4;
 	i_cache = new LRU(cs, associativity, index_size, bo_size);
 }
 
@@ -86,8 +87,6 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		write_refs++;
 		write = true;
 	}
-	if (index == 99)
-		index = index;
 	if (ref == 'I')
 	{
 		//check i cache
@@ -99,6 +98,11 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		else {
 			i_hitCnt += realign(bo, bytes) - 1;
 			i_missCnt++;
+		}
+		if (i_cache->dirtyKickout == true) {
+			dirtyKickout = true;
+			dirtyAddress = i_cache->dirtyAddress;
+			i_cache->dirtyKickout = false;
 		}
 	}
 	else
@@ -117,11 +121,16 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 			d_hitCnt += realign(bo, bytes) - 1;
 			d_missCnt++;
 		}
+		if (cache->dirtyKickout == true) {
+			dirtyKickout = true;
+			dirtyAddress = cache->dirtyAddress;
+			cache->dirtyKickout = false;
+		}
 	}
 	return hit;
 }
 
-int L1Cache::realign(unsigned int bo, unsigned int bytes)
+int Cache::realign(unsigned int bo, unsigned int bytes)
 {
 	//distance in bytes from start of current word
 	int start = bo % 4;
@@ -164,6 +173,21 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 	bool hit = false;
 	bool write = false;
 	hit = cache->check_addr(index, tag, write);
+	if (hit) {
+		hitCnt++;
+	}
+	else {
+		missCnt++;
+	}
 	return hit;
 	//check L2 cache
+}
+
+void L2Cache::dirtyWrite(unsigned long long int address) {
+	unsigned long long int tag = address & (tag_mask >> (bo_size + index_size));
+	unsigned long long int index = address & (index_mask >> bo_size);
+	bool hit = false;
+	bool write = true;
+	hit = cache->check_addr(index, tag, write);
+	return;
 }

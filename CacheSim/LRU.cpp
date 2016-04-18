@@ -116,10 +116,10 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				return ret_bit;
 			}
 			else
-            {
-                prev = start;
-                start = start->next; //check next tag_node
-            }
+			{
+				prev = start;
+				start = start->next; //check next tag_node
+			}
 		}
 	}
 	if (start == nullptr) //reached the end of the LRU, need to check victim cache
@@ -128,6 +128,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		tagNode* cpy = new tagNode;
 		unsigned long long vic_in_tag = (in_tag << index_bit_size + bo_size) | (index << bo_size);
 		vic_start = vic_dummy->next;
+		tagNode* vic_prev = vic_dummy;
 		//This was loading in the current address instead of the kicked address
 		while (vic_start != nullptr)
 		{ //ENTERS WHILE LOOP
@@ -137,11 +138,11 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				vic_start->valid = 1;
 				vic_start->tag = (prev->tag << index_bit_size + bo_size) | (index << bo_size);
 				vic_start->dirty = prev->dirty;
-                mov_tagNode(vic_start, vic_dummy);
+				mov_tagNode(vic_start, vic_dummy);
 				prev->tag = in_tag;
 				prev->dirty = int(write);
 				mov_tagNode(prev, dummy);
-                break;
+				break;
 			}
 			else
 			{
@@ -165,10 +166,32 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 					break;
 				}
 				else
-                {
-                    vic_start = vic_start->next;
-                }
+				{
+					vic_start = vic_start->next;
+					vic_prev = vic_prev->next;
+				}
 			}
+		}
+		if(vic_start == nullptr)
+		{
+			if (vic_prev->dirty == 1) {
+				this->dirtyKickout = true;
+				this->dirtyAddress = vic_prev->tag;
+			}
+			*cpy = *prev;
+			cpy->tag = prev->tag;
+			cpy->dirty = prev->dirty;
+			//set prev info to victim cache info:
+			prev->tag = in_tag;
+			prev->dirty = 0;
+			//set victim cache info to prev info:
+			vic_prev->tag = (cpy->tag << index_bit_size + bo_size) | (index << bo_size);
+			vic_prev->dirty = cpy->dirty;
+
+			mov_tagNode(prev, dummy);
+			mov_tagNode(vic_prev, vic_dummy);
+			// Not sure if I should be incrementing vc_trans
+			vc_trans++;
 		}
 		delete cpy;
 	}
