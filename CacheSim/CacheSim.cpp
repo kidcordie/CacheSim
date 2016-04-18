@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
 	outFile << "Memory Level: L1i\n";
 	outFile << "  Hit Count = " <<  L1->i_hitCnt << "     Miss Count = " << L1->i_missCnt << endl;
 	outFile << "  Total requests = " << (L1->i_hitCnt+L1->i_missCnt) << endl;
-	outFile << "  Hit Rate = " << (L1->i_hitCnt)/(L1->i_hitCnt+L1->i_missCnt) << "     Miss rate = " << (L1->i_missCnt)/(L1->i_hitCnt+L1->i_missCnt) << endl;
+	outFile << "  Hit Rate = " << 100*((L1->i_hitCnt)/(L1->i_hitCnt+L1->i_missCnt)) << "%     Miss rate = " << (L1->i_missCnt)/(L1->i_hitCnt+L1->i_missCnt) << endl;
 	outFile << "  Kickouts = " << "; Dirty kickouts = " << "; Transfers = " << endl;
 	outFile << "  VC Hit count = " << "\n\n";
 

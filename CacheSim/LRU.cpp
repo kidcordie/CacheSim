@@ -131,13 +131,19 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		//This was loading in the current address instead of the kicked address
 		while (vic_start != nullptr)
 		{
-			std::cout << std::hex << vic_start->tag << std::endl;
+			//std::cout << std::hex << vic_start->tag << std::endl;
 			if (vic_start->tag == vic_in_tag)  //hit
             {
-                //SWAP VALUES IN PREV_CACHE LRU
+                //swap values in prev_cache LRU
                 *cpy = *prev;
                 cpy->tag = prev->tag;
                 cpy->dirty = prev->dirty;
+                if (write)
+                {
+                    //NEED TO WRITE BACK TO L2 WITH DIRTY BIT = 1
+                    //This is a dirty kickout? I think..
+                }
+
                 //set prev info to victim cache info:
                 prev->tag = in_tag;
                 prev->dirty = vic_start->dirty;
@@ -147,23 +153,23 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 
                 mov_tagNode(prev, dummy);
                 mov_tagNode(vic_start, vic_dummy);
+                // NEED TO KEEP TRACK OF VC HIT COUNT FOR I AND D
+
+                vcHit_cnt++;
                 vc_trans++;
                 break;
             }
 			else
 			{
 				if (vic_start->valid == 0 || vic_start->next == nullptr)  //miss, something from L1 must get evicted.
-                {   // CHANGE THIS:
-                    /*vic_start->valid = 1;
-                    vic_start->tag = (prev->tag << index_bit_size + bo_size) | (index << bo_size);
-                    vic_start->dirty = prev->dirty;
-                    mov_tagNode(vic_start, vic_dummy);
-                    prev->tag = in_tag;
-                    prev->dirty = int(write);
-                    mov_tagNode(prev, dummy);*/
+                {
                     *cpy = *prev;
                     cpy->tag = prev->tag;
                     cpy->dirty = prev->dirty;
+                    if (vic_start->next == nullptr && vic_start->dirty == 1)
+                    {
+                        //DIRTY KICKOUT, WRITE TO L2
+                    }
                     //set prev info to current info:
                     prev->tag = in_tag;
                     prev->dirty = 0;
