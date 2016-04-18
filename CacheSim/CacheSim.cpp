@@ -119,15 +119,66 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	ofstream outFile ("outFile.txt");
 
-	cout << "L1 hits: " << L1hits << endl;
-	cout << "L2 hits: " << L2hits << endl;
+	cout << "\nL2 hits: " << L2hits << endl;
 	cout << "MM accesses: " << MMaccess << endl;
 
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
     cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
 	cout << "L1_d hits: " << dec << L1->d_hitCnt << endl;
 	cout << "L1_d misses: " << dec << L1->d_missCnt << endl;
+
+	outFile << "Memory System: \n";
+	outFile << "  Dcache size = " << dec << cs1 << " : ways = " << dec << assoc1 << " : block size = " << bs1 << endl;
+	outFile << "  Icache size = " << dec << cs1 << " : ways = " << dec << assoc1 << " : block size = " << bs1 << endl;
+	outFile << "  L2-cache size = " << dec << cs2 << " : ways = " << dec << assoc2 << " : block size = " << bs2 << endl;
+	outFile << "  Memory ready time = \n\n";
+
+	outFile << "Execute time = " << "Total refs = \n";
+	outFile << "Inst refs = " << "Data refs = \n\n";
+
+	outFile << "Number of reference types: [Percentage]\n";
+	outFile << "  Reads = \n";
+	outFile << "  Writes = \n";
+	outFile << "  Inst. = \n";
+	outFile << "  Total = \n\n";
+
+	outFile << "Total cycles for activities: [Percentage]\n";
+	outFile << "  Reads = \n";
+	outFile << "  Writes = \n";
+	outFile << "  Inst. = \n";
+	outFile << "  Total = \n\n";
+
+	outFile << "CPI = \n";
+	outFile << "Ideal: Exec. Time = \n";
+	outFile << "Ideal mis-aligned: Exec. Time = " << "; CPI = " << "\n\n";
+
+	outFile << "Memory Level: L1i\n";
+	outFile << "  Hit Count = " <<  L1->i_hitCnt << "     Miss Count = " << L1->i_missCnt << endl;
+	outFile << "  Total requests = " << (L1->i_hitCnt+L1->i_missCnt) << endl;
+	outFile << "  Hit Rate = " << (L1->i_hitCnt)/(L1->i_hitCnt+L1->i_missCnt) << "     Miss rate = " << (L1->i_missCnt)/(L1->i_hitCnt+L1->i_missCnt) << endl;
+	outFile << "  Kickouts = " << "; Dirty kickouts = " << "; Transfers = " << endl;
+	outFile << "  VC Hit count = " << "\n\n";
+
+	outFile << "Memory Level: L1d\n";
+	outFile << "  Hit Count = " <<  L1->d_hitCnt << "     Miss Count = " << L1->d_missCnt << endl;
+	outFile << "  Total requests = " << (L1->d_hitCnt+L1->d_missCnt) << endl;
+	outFile << "  Hit Rate = " << (L1->d_hitCnt)/(L1->d_hitCnt+L1->d_missCnt) << "     Miss rate = " << (L1->d_missCnt)/(L1->d_hitCnt+L1->d_missCnt) << endl;
+	outFile << "  Kickouts = " << "; Dirty kickouts = " << "; Transfers = " << endl;
+	outFile << "  VC Hit count = " << "\n\n";
+
+	outFile << "Memory Level: L2\n";
+	outFile << "  Hit Count = " <<  L2hits << "     Miss Count = " << endl;
+	outFile << "  Total requests = " << "" << endl;
+	outFile << "  Hit Rate = " << (L1->i_hitCnt)/(L1->i_hitCnt+L1->i_missCnt) << "     Miss rate = " << (L1->i_missCnt)/(L1->i_hitCnt+L1->i_missCnt) << endl;
+	outFile << "  Kickouts = " << "; Dirty kickouts = " << "; Transfers = " << endl;
+	outFile << "  VC Hit count = " << "\n\n";
+
+	outFile << "L1 cache cost " << endl;
+	outFile << "L2 cache cost = " << endl;
+
+	outFile.close();
 	delete(L1);
 	delete(L2);
     return 0;

@@ -34,10 +34,10 @@ public:
 	int getWriteRefs();
 	int getReadRefs();
 	int getInstRefs();
-	int i_hitCnt = 0;
-	int d_hitCnt = 0;
-	int i_missCnt = 0;
-	int d_missCnt = 0;
+	unsigned long long int i_hitCnt = 0;
+	unsigned long long int d_hitCnt = 0;
+	unsigned long long int i_missCnt = 0;
+	unsigned long long int d_missCnt = 0;
 protected:
 	LRU* i_cache;
 	int write_refs=0;
