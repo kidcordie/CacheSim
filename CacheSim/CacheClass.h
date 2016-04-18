@@ -59,7 +59,7 @@ public:
 	int hitCnt = 0;
 	int missCnt = 0;
 	bool parseRequest(unsigned long long int address, unsigned int bytes);
-	void L2Cache::dirtyWrite(unsigned long long int address);
+	void dirtyWrite(unsigned long long int address);
 protected:
 	int transfertime;
 };

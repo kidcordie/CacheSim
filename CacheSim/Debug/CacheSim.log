@@ -4,6 +4,4 @@ c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(12
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(139): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(159): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(188): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-  CacheSim.cpp
-  Generating Code...
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe

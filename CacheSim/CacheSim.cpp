@@ -89,10 +89,18 @@ int main(int argc, char* argv[])
 		op = input_line[0];
 		new_string = "0X";
 		//gets address as string
+		i = 2;
+		while (!isspace(input_line[i]))
+		{
+			new_string += input_line[i];
+			++i;
+		}
+		/*
 		for (i = 2; i < 14; i++)
 		{
 			new_string += input_line[i];
 		}
+		*/
 		//converts hex address string to unsigned long long int
 		address = stoull(new_string, nullptr, 16);
 		new_string = "";

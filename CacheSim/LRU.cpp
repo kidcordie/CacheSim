@@ -132,7 +132,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		//This was loading in the current address instead of the kicked address
 		while (vic_start != nullptr)
 		{ //ENTERS WHILE LOOP
-			std::cout << std::hex << vic_start->tag << std::endl;
+			//std::cout << std::hex << vic_start->tag << std::endl;
 			if (vic_start->valid == 0)  //miss, write in values
 			{
 				vic_start->valid = 1;
