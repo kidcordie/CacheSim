@@ -129,6 +129,14 @@ int main(int argc, char* argv[])
 		{
 			MMaccess++;
 		}
+		while (L1->address_overflow)
+		{
+			L1->address_overflow = false;
+			if (!L1->parseRequest(op, L1->next_address, L1->next_bytes))
+			{
+				L2->parseRequest(L1->next_address, L1->next_bytes);
+			}
+		}
 	}
 
 

@@ -81,6 +81,9 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	unsigned long long int bo = address & bo_mask;
 	/*std::cout << "tag: " << std::hex << tag << " index: " << std::hex << index <<
 		" Byte offset: " << bo << std::endl;*/
+	if (address == 140195485860029) {
+		index = index;
+	}
 	bool hit = false;
 	bool write = false;
 	if (ref == 'W') {
@@ -93,10 +96,10 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		inst_refs++;
 		hit = i_cache->check_addr(index, tag, write);
 		if (hit) {
-			i_hitCnt += realign(bo, bytes);
+			i_hitCnt += realign(address, bo, bytes);
 		}
 		else {
-			i_hitCnt += realign(bo, bytes) - 1;
+			i_hitCnt += realign(address, bo, bytes) - 1;
 			i_missCnt++;
 		}
 		if (i_cache->dirtyKickout == true) {
@@ -115,10 +118,10 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 
 		if (hit){
 			//d_hitCnt++;
-			d_hitCnt += realign(bo, bytes);
+			d_hitCnt += realign(address, bo, bytes);
 		}
 		else {
-			d_hitCnt += realign(bo, bytes) - 1;
+			d_hitCnt += realign(address, bo, bytes) - 1;
 			d_missCnt++;
 		}
 		if (cache->dirtyKickout == true) {
@@ -130,13 +133,22 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	return hit;
 }
 
-int Cache::realign(unsigned int bo, unsigned int bytes)
+int L1Cache::realign(unsigned long long int address, unsigned int bo, unsigned int bytes)
 {
 	//distance in bytes from start of current word
 	int start = bo % 4;
 	//amount of bytes to include after last byte
 	int new_bytes = bytes - (4 - start);
 	int transfers = 1;
+	//stuck here
+	if (bo + bytes > 32) {
+		int new_byte_request = (bo + bytes) - 32;
+		int ebytes = bytes - new_byte_request;
+		address_overflow = true;
+		new_bytes = new_bytes - new_byte_request;
+		next_address = address + ebytes;
+		next_bytes = new_byte_request;
+	}
 	if (new_bytes > 0) {
 		transfers+= (new_bytes / 4) + (new_bytes % 4 != 0);
 	}
