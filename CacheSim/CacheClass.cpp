@@ -99,10 +99,15 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 			i_hitCnt += realign(address, bo, bytes);
 		}
 		else {
+			if (i_cache->vc_hit) {
+				i_cache->vc_hit = false;
+				vc_hit = true;
+			}
 			i_hitCnt += realign(address, bo, bytes) - 1;
 			i_missCnt++;
 		}
 		if (i_cache->dirtyKickout == true) {
+			i_dirty_kickCnt++;
 			dirtyKickout = true;
 			dirtyAddress = i_cache->dirtyAddress;
 			i_cache->dirtyKickout = false;
@@ -121,10 +126,15 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 			d_hitCnt += realign(address, bo, bytes);
 		}
 		else {
+			if (cache->vc_hit) {
+				cache->vc_hit = false;
+				vc_hit = true;
+			}
 			d_hitCnt += realign(address, bo, bytes) - 1;
 			d_missCnt++;
 		}
 		if (cache->dirtyKickout == true) {
+			d_dirty_kickCnt++;
 			dirtyKickout = true;
 			dirtyAddress = cache->dirtyAddress;
 			cache->dirtyKickout = false;

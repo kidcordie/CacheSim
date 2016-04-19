@@ -148,6 +148,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			{
 				if (vic_start->tag == vic_in_tag)  //hit
 				{
+					vc_hit = true;
 					//SWAP VALUES IN PREV_CACHE LRU
 					*cpy = *prev;
 					cpy->tag = prev->tag;

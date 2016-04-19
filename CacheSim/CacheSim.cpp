@@ -122,6 +122,10 @@ int main(int argc, char* argv[])
 			}
 			L1hits++;
 		}
+		else if (L1->vc_hit)
+		{
+			L1->vc_hit = false;
+		}
 		else if (L2->parseRequest(address, bytesize))
 		{
 			L2hits++;
@@ -136,20 +140,25 @@ int main(int argc, char* argv[])
 			overflow_address = L1->next_address;
 			if (!L1->parseRequest(op, overflow_address, L1->next_bytes))
 			{
-				L2->parseRequest(overflow_address, L1->next_bytes);
+				if (L1->vc_hit)
+				{
+					L1->vc_hit = false;
+				}
+				else
+				{
+					L2->parseRequest(overflow_address, L1->next_bytes);
+				}
 			}
 		}
 	}
 
 
-	cout << "L1 hits: " << L1hits << endl;
-	cout << "L2 hits: " << L2hits << endl;
-	cout << "MM accesses: " << MMaccess << endl;
-
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
     cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
+	cout << "L1_i dirty kickouts: " << dec << L1->i_dirty_kickCnt << endl;
 	cout << "L1_d hits: " << dec << L1->d_hitCnt << endl;
 	cout << "L1_d misses: " << dec << L1->d_missCnt << endl;
+	cout << "L1_d dirty kickouts: " << dec << L1->d_dirty_kickCnt << endl;
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
 	delete(L1);
