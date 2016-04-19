@@ -9,7 +9,7 @@ public:
 	int getAssociativity();
 	int getHitTime();
 	int getMissTime();
-
+	LRU* cache;
 protected:
 	int cachesize;
 	int blocksize;
@@ -22,7 +22,6 @@ protected:
 	unsigned long long int bo_mask;
 	unsigned long long int index_mask;
 	unsigned long long int tag_mask;
-	LRU* cache;
 	//VictimCache* VC;
 };
 
@@ -48,8 +47,8 @@ public:
 	int next_bytes=0;
 	unsigned long long int dirtyAddress;
 	int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
-protected:
 	LRU* i_cache;
+protected:
 	int write_refs=0;
 	int read_refs=0;
 	int inst_refs=0;
@@ -66,6 +65,7 @@ public:
 	int missCnt = 0;
 	bool parseRequest(unsigned long long int address, unsigned int bytes);
 	void dirtyWrite(unsigned long long int address);
+	//int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
 protected:
 	int transfertime;
 };

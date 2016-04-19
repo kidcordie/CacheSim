@@ -105,7 +105,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				start->dirty = 1;
 			ret_bit = false;
 			// WRITE TO L2
-			break;
+			return ret_bit;
 		}
 		else
 		{
@@ -142,7 +142,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				prev->tag = in_tag;
 				prev->dirty = int(write);
 				mov_tagNode(prev, dummy);
-				break;
+				return ret_bit;
 			}
 			else
 			{
@@ -164,7 +164,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 					mov_tagNode(vic_start, vic_dummy);
 					vc_trans++;
 					//delete cpy;
-					break;
+					return ret_bit;
 				}
 				else
 				{
@@ -191,6 +191,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 
 			mov_tagNode(prev, dummy);
 			mov_tagNode(vic_prev, vic_dummy);
+			this->kickouts++;
 			// Not sure if I should be incrementing vc_trans
 			//vc_trans++;
 		}
