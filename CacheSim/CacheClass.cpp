@@ -81,9 +81,6 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	unsigned long long int bo = address & bo_mask;
 	/*std::cout << "tag: " << std::hex << tag << " index: " << std::hex << index <<
 		" Byte offset: " << bo << std::endl;*/
-	if (address == 140195485860029) {
-		index = index;
-	}
 	bool hit = false;
 	bool write = false;
 	if (ref == 'W') {
@@ -106,12 +103,6 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 			i_hitCnt += realign(address, bo, bytes) - 1;
 			i_missCnt++;
 		}
-		if (i_cache->dirtyKickout == true) {
-			i_dirty_kickCnt++;
-			dirtyKickout = true;
-			dirtyAddress = i_cache->dirtyAddress;
-			i_cache->dirtyKickout = false;
-		}
 	}
 	else
 	{
@@ -133,6 +124,8 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 			d_hitCnt += realign(address, bo, bytes) - 1;
 			d_missCnt++;
 		}
+		if (write && address_overflow)
+			extra_writes++;
 		if (cache->dirtyKickout == true) {
 			d_dirty_kickCnt++;
 			dirtyKickout = true;
@@ -195,14 +188,16 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 	bool hit = false;
 	bool write = false;
 	hit = cache->check_addr(index, tag, write);
+
 	if (hit) {
 		hitCnt++;
 	}
 	else {
+		if (cache->vc_hit)
+			cache->vc_hit = false;
 		missCnt++;
 	}
 	return hit;
-	//check L2 cache
 }
 
 void L2Cache::dirtyWrite(unsigned long long int address) {
@@ -211,5 +206,7 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
 	bool hit = false;
 	bool write = true;
 	hit = cache->check_addr(index, tag, write);
+	if (cache->vc_hit)
+		cache->vc_hit = false;
 	return;
 }

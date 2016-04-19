@@ -9,6 +9,10 @@ public:
 	int getAssociativity();
 	int getHitTime();
 	int getMissTime();
+	bool vc_hit = false;
+	bool address_overflow = false;
+	unsigned long long int next_address;
+	int next_bytes = 0;
 	LRU* cache;
 protected:
 	int cachesize;
@@ -40,12 +44,9 @@ public:
 	unsigned long long int d_missCnt = 0;
 	unsigned long long int i_dirty_kickCnt = 0;
 	unsigned long long int d_dirty_kickCnt = 0;
-	bool vc_hit = false;
 	bool dirtyKickout = false;
-	bool address_overflow = false;
-	unsigned long long int next_address;
-	int next_bytes=0;
 	unsigned long long int dirtyAddress;
+	int extra_writes=0;
 	int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
 	LRU* i_cache;
 protected:
@@ -65,7 +66,6 @@ public:
 	int missCnt = 0;
 	bool parseRequest(unsigned long long int address, unsigned int bytes);
 	void dirtyWrite(unsigned long long int address);
-	//int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
 protected:
 	int transfertime;
 };

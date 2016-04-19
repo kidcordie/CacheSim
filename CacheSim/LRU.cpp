@@ -40,10 +40,10 @@ LRU::~LRU()
 	}
 	start = vic_dummy->next;
 	std::cout << "VC" << std::endl;
-	std::cout << vc_trans << std::endl;
+	std::cout << std::dec << vc_trans << std::endl;
 	while (start != nullptr) {
 		if (start->valid) {
-			//std::cout << std::hex << start->tag << std::endl;
+			std::cout << std::hex << start->tag << std::endl;
 		}
 		start = start->next;
 	}
@@ -101,8 +101,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			//write in tag and set valid = 1. If dirty, dirty = 1
 			start->valid = 1;
 			start->tag = in_tag;
-			if (write == true)
-				start->dirty = 1;
+			start->dirty = int(write);
 			ret_bit = false;
 			// WRITE TO L2
 			return ret_bit;
@@ -113,6 +112,8 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			if (start->tag == in_tag) //hit
 			{
 				ret_bit = true;
+				if (write)
+					start->dirty = int(write);
 				return ret_bit;
 			}
 			else
@@ -155,7 +156,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 					cpy->dirty = prev->dirty;
 					//set prev info to victim cache info:
 					prev->tag = in_tag;
-					prev->dirty = int(write);
+					prev->dirty = int(write) | vic_start->dirty;
 					//set victim cache info to prev info:
 					vic_start->tag = (cpy->tag << index_bit_size + bo_size) | (index << bo_size);
 					vic_start->dirty = cpy->dirty;
@@ -178,6 +179,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			if (vic_prev->dirty == 1) {
 				this->dirtyKickout = true;
 				this->dirtyAddress = vic_prev->tag << bo_size;
+				dirtyKickCnt++;
 			}
 			*cpy = *prev;
 			cpy->tag = prev->tag;
