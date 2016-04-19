@@ -77,6 +77,7 @@ int main(int argc, char* argv[])
 	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, tt2, bw2);
 	char op;
 	unsigned long long int address;
+	unsigned long long int overflow_address;
 	unsigned int bytesize;
 	string input_line;
 	string new_string = "";
@@ -132,9 +133,10 @@ int main(int argc, char* argv[])
 		while (L1->address_overflow)
 		{
 			L1->address_overflow = false;
-			if (!L1->parseRequest(op, L1->next_address, L1->next_bytes))
+			overflow_address = L1->next_address;
+			if (!L1->parseRequest(op, overflow_address, L1->next_bytes))
 			{
-				L2->parseRequest(L1->next_address, L1->next_bytes);
+				L2->parseRequest(overflow_address, L1->next_bytes);
 			}
 		}
 	}
