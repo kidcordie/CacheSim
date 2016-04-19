@@ -9,7 +9,11 @@ public:
 	int getAssociativity();
 	int getHitTime();
 	int getMissTime();
-
+	bool vc_hit = false;
+	bool address_overflow = false;
+	unsigned long long int next_address;
+	int next_bytes = 0;
+	LRU* cache;
 protected:
 	int cachesize;
 	int blocksize;
@@ -22,7 +26,6 @@ protected:
 	unsigned long long int bo_mask;
 	unsigned long long int index_mask;
 	unsigned long long int tag_mask;
-	LRU* cache;
 	//VictimCache* VC;
 };
 
@@ -35,21 +38,18 @@ public:
 	int getWriteRefs();
 	int getReadRefs();
 	int getInstRefs();
-	int i_hitCnt = 0;
-	int d_hitCnt = 0;
-	int i_missCnt = 0;
-	int d_missCnt = 0;
-	int i_dirty_kickCnt = 0;
-	int d_dirty_kickCnt = 0;
-	bool vc_hit = false;
+	unsigned long long int i_hitCnt = 0;
+	unsigned long long int d_hitCnt = 0;
+	unsigned long long int i_missCnt = 0;
+	unsigned long long int d_missCnt = 0;
+	unsigned long long int i_dirty_kickCnt = 0;
+	unsigned long long int d_dirty_kickCnt = 0;
 	bool dirtyKickout = false;
-	bool address_overflow = false;
-	unsigned long long int next_address;
-	int next_bytes=0;
 	unsigned long long int dirtyAddress;
+	int extra_writes=0;
 	int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
-protected:
 	LRU* i_cache;
+protected:
 	int write_refs=0;
 	int read_refs=0;
 	int inst_refs=0;

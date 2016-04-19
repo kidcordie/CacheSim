@@ -21,6 +21,8 @@ public:
 	int vcdMiss_cnt=0;
 	int vc_trans=0;
 	int cunt=0;
+	int kickouts = 0;
+	int dirtyKickCnt = 0;
 	bool vc_hit = false;
 	bool dirtyKickout = false;
 	unsigned long long int dirtyAddress;

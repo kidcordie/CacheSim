@@ -1,17 +1,7 @@
-﻿  stdafx.cpp
-  LRU.cpp
+﻿  LRU.cpp
 c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(29): warning C4018: '<': signed/unsigned mismatch
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(129): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(139): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(160): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(189): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-  CacheSim.cpp
-  CacheClass.cpp
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(13): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(14): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(99): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(106): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(126): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\cacheclass.cpp(133): warning C4244: 'argument': conversion from 'unsigned __int64' to 'unsigned int', possible loss of data
-  Generating Code...
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(130): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(140): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(161): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(191): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe

@@ -78,6 +78,7 @@ int main(int argc, char* argv[])
 	char op;
 	unsigned long long int address;
 	unsigned long long int overflow_address;
+	int overflow_bytes;
 	unsigned int bytesize;
 	string input_line;
 	string new_string = "";
@@ -116,10 +117,6 @@ int main(int argc, char* argv[])
 		//cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
 		if (L1->parseRequest(op, address, bytesize))
 		{
-			if (L1->dirtyKickout) {
-				L1->dirtyKickout = false;
-				L2->dirtyWrite(L1->dirtyAddress);
-			}
 			L1hits++;
 		}
 		else if (L1->vc_hit)
@@ -128,17 +125,26 @@ int main(int argc, char* argv[])
 		}
 		else if (L2->parseRequest(address, bytesize))
 		{
+			if (L1->dirtyKickout) {
+				L1->dirtyKickout = false;
+				L2->dirtyWrite(L1->dirtyAddress);
+			}
 			L2hits++;
 		}
 		else
 		{
+			if (L1->dirtyKickout) {
+				L1->dirtyKickout = false;
+				L2->dirtyWrite(L1->dirtyAddress);
+			}
 			MMaccess++;
 		}
 		while (L1->address_overflow)
 		{
 			L1->address_overflow = false;
 			overflow_address = L1->next_address;
-			if (!L1->parseRequest(op, overflow_address, L1->next_bytes))
+			overflow_bytes = L1->next_bytes;
+			if (!L1->parseRequest(op, overflow_address, overflow_bytes))
 			{
 				if (L1->vc_hit)
 				{
@@ -146,19 +152,26 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					L2->parseRequest(overflow_address, L1->next_bytes);
+					if (L1->dirtyKickout) {
+						L1->dirtyKickout = false;
+						L2->dirtyWrite(L1->dirtyAddress);
+					}
+					L2->parseRequest(overflow_address, overflow_bytes);
 				}
 			}
 		}
 	}
-
-
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
-    cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
+	cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
+	cout << "L1_i kickouts: " << dec << L1->i_cache->kickouts << endl;
 	cout << "L1_i dirty kickouts: " << dec << L1->i_dirty_kickCnt << endl;
 	cout << "L1_d hits: " << dec << L1->d_hitCnt << endl;
 	cout << "L1_d misses: " << dec << L1->d_missCnt << endl;
+	cout << "L1_d kickouts: " << dec << L1->cache->kickouts << endl;
 	cout << "L1_d dirty kickouts: " << dec << L1->d_dirty_kickCnt << endl;
+	cout << "L1 read refs: " << dec << L1->getReadRefs() << endl;
+	cout << "L1 write refs: " << dec << L1->getWriteRefs() << endl;
+	cout << "L1 inst refs: " << dec << L1->getInstRefs() << endl;
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
 	delete(L1);
