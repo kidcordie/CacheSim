@@ -39,6 +39,9 @@ public:
 	int d_hitCnt = 0;
 	int i_missCnt = 0;
 	int d_missCnt = 0;
+	int i_dirty_kickCnt = 0;
+	int d_dirty_kickCnt = 0;
+	bool vc_hit = false;
 	bool dirtyKickout = false;
 	bool address_overflow = false;
 	unsigned long long int next_address;
