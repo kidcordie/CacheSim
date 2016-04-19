@@ -155,7 +155,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 					cpy->dirty = prev->dirty;
 					//set prev info to victim cache info:
 					prev->tag = in_tag;
-					prev->dirty = vic_start->dirty;
+					prev->dirty = int(write);
 					//set victim cache info to prev info:
 					vic_start->tag = (cpy->tag << index_bit_size + bo_size) | (index << bo_size);
 					vic_start->dirty = cpy->dirty;
@@ -184,7 +184,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			cpy->dirty = prev->dirty;
 			//set prev info to victim cache info:
 			prev->tag = in_tag;
-			prev->dirty = 0;
+			prev->dirty = int(write);
 			//set victim cache info to prev info:
 			vic_prev->tag = (cpy->tag << index_bit_size + bo_size) | (index << bo_size);
 			vic_prev->dirty = cpy->dirty;
