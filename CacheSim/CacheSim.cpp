@@ -77,6 +77,7 @@ int main(int argc, char* argv[])
 	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, tt2, bw2);
 	char op;
 	unsigned long long int address;
+	unsigned long long int overflow_address;
 	unsigned int bytesize;
 	string input_line;
 	string new_string = "";
@@ -89,10 +90,18 @@ int main(int argc, char* argv[])
 		op = input_line[0];
 		new_string = "0X";
 		//gets address as string
+		i = 2;
+		while (!isspace(input_line[i]))
+		{
+			new_string += input_line[i];
+			++i;
+		}
+		/*
 		for (i = 2; i < 14; i++)
 		{
 			new_string += input_line[i];
 		}
+		*/
 		//converts hex address string to unsigned long long int
 		address = stoull(new_string, nullptr, 16);
 		new_string = "";
@@ -120,6 +129,15 @@ int main(int argc, char* argv[])
 		else
 		{
 			MMaccess++;
+		}
+		while (L1->address_overflow)
+		{
+			L1->address_overflow = false;
+			overflow_address = L1->next_address;
+			if (!L1->parseRequest(op, overflow_address, L1->next_bytes))
+			{
+				L2->parseRequest(overflow_address, L1->next_bytes);
+			}
 		}
 	}
 

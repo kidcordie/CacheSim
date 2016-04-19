@@ -23,7 +23,6 @@ protected:
 	unsigned long long int index_mask;
 	unsigned long long int tag_mask;
 	LRU* cache;
-	int realign(unsigned int bo, unsigned int bytes);
 	//VictimCache* VC;
 };
 
@@ -41,7 +40,11 @@ public:
 	int i_missCnt = 0;
 	int d_missCnt = 0;
 	bool dirtyKickout = false;
+	bool address_overflow = false;
+	unsigned long long int next_address;
+	int next_bytes=0;
 	unsigned long long int dirtyAddress;
+	int realign(unsigned long long int address, unsigned int bo, unsigned int bytes);
 protected:
 	LRU* i_cache;
 	int write_refs=0;
@@ -59,7 +62,7 @@ public:
 	int hitCnt = 0;
 	int missCnt = 0;
 	bool parseRequest(unsigned long long int address, unsigned int bytes);
-	void L2Cache::dirtyWrite(unsigned long long int address);
+	void dirtyWrite(unsigned long long int address);
 protected:
 	int transfertime;
 };
