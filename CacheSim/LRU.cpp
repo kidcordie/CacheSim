@@ -177,7 +177,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		{
 			if (vic_prev->dirty == 1) {
 				this->dirtyKickout = true;
-				this->dirtyAddress = vic_prev->tag;
+				this->dirtyAddress = vic_prev->tag << bo_size;
 			}
 			*cpy = *prev;
 			cpy->tag = prev->tag;
@@ -192,7 +192,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			mov_tagNode(prev, dummy);
 			mov_tagNode(vic_prev, vic_dummy);
 			// Not sure if I should be incrementing vc_trans
-			vc_trans++;
+			//vc_trans++;
 		}
 		delete cpy;
 	}

@@ -206,8 +206,8 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 }
 
 void L2Cache::dirtyWrite(unsigned long long int address) {
-	unsigned long long int tag = address & (tag_mask >> (bo_size + index_size));
-	unsigned long long int index = address & (index_mask >> bo_size);
+	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
+	unsigned long long int index = (address & index_mask) >> bo_size;
 	bool hit = false;
 	bool write = true;
 	hit = cache->check_addr(index, tag, write);
