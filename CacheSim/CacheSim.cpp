@@ -151,10 +151,8 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-
-
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
-    cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
+	cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
 	cout << "L1_i dirty kickouts: " << dec << L1->i_dirty_kickCnt << endl;
 	cout << "L1_d hits: " << dec << L1->d_hitCnt << endl;
 	cout << "L1_d misses: " << dec << L1->d_missCnt << endl;

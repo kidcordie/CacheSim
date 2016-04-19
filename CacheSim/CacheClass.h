@@ -35,12 +35,12 @@ public:
 	int getWriteRefs();
 	int getReadRefs();
 	int getInstRefs();
-	int i_hitCnt = 0;
-	int d_hitCnt = 0;
-	int i_missCnt = 0;
-	int d_missCnt = 0;
-	int i_dirty_kickCnt = 0;
-	int d_dirty_kickCnt = 0;
+	unsigned long long int i_hitCnt = 0;
+	unsigned long long int d_hitCnt = 0;
+	unsigned long long int i_missCnt = 0;
+	unsigned long long int d_missCnt = 0;
+	unsigned long long int i_dirty_kickCnt = 0;
+	unsigned long long int d_dirty_kickCnt = 0;
 	bool vc_hit = false;
 	bool dirtyKickout = false;
 	bool address_overflow = false;

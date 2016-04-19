@@ -33,7 +33,7 @@ LRU::~LRU()
 		while (start != nullptr) {
 			if (start->valid) {
 				i = i;
-				std::cout << std::hex << i << ": " << std::hex << start->tag << std::endl;
+				//std::cout << std::hex << i << ": " << std::hex << start->tag << std::endl;
 			}
 			start = start->next;
 		}
@@ -43,7 +43,7 @@ LRU::~LRU()
 	std::cout << vc_trans << std::endl;
 	while (start != nullptr) {
 		if (start->valid) {
-			std::cout << std::hex << start->tag << std::endl;
+			//std::cout << std::hex << start->tag << std::endl;
 		}
 		start = start->next;
 	}
