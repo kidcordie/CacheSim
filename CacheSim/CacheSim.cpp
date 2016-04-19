@@ -172,7 +172,6 @@ int main(int argc, char* argv[])
 	cout << "L1 read refs: " << dec << L1->getReadRefs() << endl;
 	cout << "L1 write refs: " << dec << L1->getWriteRefs() << endl;
 	cout << "L1 inst refs: " << dec << L1->getInstRefs() << endl;
-	cout << "L1 extra write refs: " << dec << L1->extra_writes << endl;
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
 	delete(L1);
