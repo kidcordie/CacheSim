@@ -91,7 +91,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	{
 		//check i cache
 		inst_refs++;
-		hit = i_cache->check_addr(index, tag, write);
+		hit = i_cache->check_addr(index, tag, write, bo);
 		if (hit) {
 			i_hitCnt += realign(address, bo, bytes);
 		}
@@ -110,7 +110,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 		if (!write)
 			read_refs++;
 
-		hit = cache->check_addr(index, tag, write);
+		hit = cache->check_addr(index, tag, write, bo);
 
 		if (hit){
 			//d_hitCnt++;
@@ -188,11 +188,11 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	bool hit = false;
 	bool write = false;
 
-	if (ref == 'W')
+	/*if (ref == 'W')
     {
         write = true;
-    }
-	hit = cache->check_addr(index, tag, write);
+    }*/
+	hit = cache->check_addr(index, tag, write, bo);
 
 	if (hit) {
 		hitCnt++;
@@ -217,9 +217,25 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
 	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
 	unsigned long long int index = (address & index_mask) >> bo_size;
 	bool hit = false;
+	unsigned long long int bo = address & bo_mask;
+
 	bool write = true;
-	hit = cache->check_addr(index, tag, write);
-	if (cache->vc_hit)
+	hit = cache->check_addr(index, tag, write, bo);
+	if(hit)
+    {
+        hitCnt++;
+    }
+    else
+    {
+        if (cache->vc_hit)
 		cache->vc_hit = false;
+        missCnt++;
+    }
+
+	if(cache->dirtyKickout == true)
+    {
+        dirty_kickCnt++;
+        cache->dirtyKickout = false;
+    }
 	return;
 }

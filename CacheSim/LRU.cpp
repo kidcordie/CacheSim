@@ -85,7 +85,7 @@ void LRU::mov_tagNode(tagNode* current, tagNode* dummy)
 }
 //takes a given index and traverses through LRU looking for given tag. Returns true for hit and false for miss
 //also looks through victim cache
-bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag, bool write)
+bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag, bool write, unsigned long long int bo)
 {
 	bool ret_bit = 0;
 	tagNode* dummy;
@@ -101,6 +101,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			//write in tag and set valid = 1. If dirty, dirty = 1
 			start->valid = 1;
 			start->tag = in_tag;
+			start->bo = bo;
 			start->dirty = int(write);
 			ret_bit = false;
 			mov_tagNode(start,dummy);
@@ -141,6 +142,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			{
 				vic_start->valid = 1;
 				vic_start->tag = (prev->tag << index_bit_size + bo_size) | (index << bo_size);
+				vic_start->bo = bo;
 				vic_start->dirty = prev->dirty;
 				mov_tagNode(vic_start, vic_dummy);
 				prev->tag = in_tag;
@@ -181,8 +183,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		{
 			if (vic_prev->dirty == 1) {
 				this->dirtyKickout = true;
-				this->dirtyAddress = vic_prev->tag << bo_size;
-				//dirtyKickCnt++;
+				this->dirtyAddress = vic_prev->tag;
 			}
 			*cpy = *prev;
 			cpy->tag = prev->tag;
