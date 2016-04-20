@@ -180,13 +180,18 @@ int L2Cache::getBusWidth()
 	return buswidth;
 };
 
-bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
+bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned int bytes)
 {
 	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
 	unsigned long long int index = (address & index_mask) >> bo_size;
 	unsigned long long int bo = address & bo_mask;
 	bool hit = false;
 	bool write = false;
+
+	if (ref == 'W')
+    {
+        write = true;
+    }
 	hit = cache->check_addr(index, tag, write);
 
 	if (hit) {
@@ -194,9 +199,17 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 	}
 	else {
 		if (cache->vc_hit)
-			cache->vc_hit = false;
+        {
+            cache->vc_hit = false;
+            vc_hit = true;
+        }
 		missCnt++;
 	}
+	if(cache->dirtyKickout == true)
+    {
+        dirty_kickCnt++;
+        cache->dirtyKickout = false;
+    }
 	return hit;
 }
 

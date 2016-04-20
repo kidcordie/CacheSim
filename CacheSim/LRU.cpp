@@ -182,7 +182,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			if (vic_prev->dirty == 1) {
 				this->dirtyKickout = true;
 				this->dirtyAddress = vic_prev->tag << bo_size;
-				dirtyKickCnt++;
+				//dirtyKickCnt++;
 			}
 			*cpy = *prev;
 			cpy->tag = prev->tag;
@@ -203,7 +203,6 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 		delete cpy;
 	}
 
-	cunt++;
 	//std::cout<<"hit/miss bool count: "<<cunt<<"\n";
 	return ret_bit;
 }
