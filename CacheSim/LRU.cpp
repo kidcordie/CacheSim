@@ -103,6 +103,7 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 			start->tag = in_tag;
 			start->dirty = int(write);
 			ret_bit = false;
+			mov_tagNode(start,dummy);
 			// WRITE TO L2
 			return ret_bit;
 		}
@@ -114,6 +115,8 @@ bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag
 				ret_bit = true;
 				if (write)
 					start->dirty = int(write);
+
+                mov_tagNode(start, dummy);
 				return ret_bit;
 			}
 			else
