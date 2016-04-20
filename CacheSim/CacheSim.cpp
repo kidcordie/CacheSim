@@ -123,7 +123,22 @@ int main(int argc, char* argv[])
 		{
 			L1->vc_hit = false;
 		}
-		else if (L2->parseRequest(address, bytesize))
+		else
+        {
+            if (L1->dirtyKickout) //write request to L2
+            {
+                //L2->parseRequest('W',L1->dirtyAddress,bytesize);
+                L1->dirtyKickout = false;
+                L2->dirtyWrite(L1->dirtyAddress);
+                if (L2->vc_hit)
+                    L2->vc_hit = false;
+            }
+            if (L2->parseRequest(op,address,bytesize))
+            {
+                L2hits++;
+            }
+		}
+		/*else if (L2->parseRequest(op,address, bytesize))
 		{
 			if (L1->dirtyKickout) {
 				L1->dirtyKickout = false;
@@ -138,7 +153,7 @@ int main(int argc, char* argv[])
 				L2->dirtyWrite(L1->dirtyAddress);
 			}
 			MMaccess++;
-		}
+		}*/
 		while (L1->address_overflow)
 		{
 			L1->address_overflow = false;
@@ -156,7 +171,7 @@ int main(int argc, char* argv[])
 						L1->dirtyKickout = false;
 						L2->dirtyWrite(L1->dirtyAddress);
 					}
-					L2->parseRequest(overflow_address, overflow_bytes);
+					L2->parseRequest(op,overflow_address, overflow_bytes);
 				}
 			}
 		}
@@ -174,6 +189,9 @@ int main(int argc, char* argv[])
 	cout << "L1 inst refs: " << dec << L1->getInstRefs() << endl;
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
+	cout << "L2 kickouts: " << dec << L2->cache->kickouts << endl;
+	cout << "L2 dirty kickouts: " << dec << L2->dirty_kickCnt << endl;
+
 	delete(L1);
 	delete(L2);
     return 0;
