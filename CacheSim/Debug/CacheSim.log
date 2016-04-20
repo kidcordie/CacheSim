@@ -1,7 +1,2 @@
-﻿  LRU.cpp
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(29): warning C4018: '<': signed/unsigned mismatch
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(130): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(140): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(161): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-c:\users\alex\documents\visual studio 2015\projects\cachesim\cachesim\lru.cpp(191): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+﻿  CacheSim.cpp
   CacheSim.vcxproj -> C:\Users\Alex\documents\visual studio 2015\Projects\CacheSim\Debug\CacheSim.exe

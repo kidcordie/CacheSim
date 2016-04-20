@@ -64,6 +64,7 @@ public:
 	int getBusWidth();
 	int hitCnt = 0;
 	int missCnt = 0;
+	int dirty_kickCnt = 0;
 	bool parseRequest(unsigned long long int address, unsigned int bytes);
 	void dirtyWrite(unsigned long long int address);
 protected:

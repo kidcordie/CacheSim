@@ -193,20 +193,44 @@ bool L2Cache::parseRequest(unsigned long long int address, unsigned int bytes)
 		hitCnt++;
 	}
 	else {
-		if (cache->vc_hit)
+		if (cache->vc_hit) {
 			cache->vc_hit = false;
+			vc_hit = true;
+		}
+		else {
+			if (cache->dirtyKickout == true)
+			{
+				dirty_kickCnt++;
+				cache->dirtyKickout = false;
+			}
+		}
 		missCnt++;
 	}
 	return hit;
 }
 
-void L2Cache::dirtyWrite(unsigned long long int address) {
+void L2Cache::dirtyWrite(unsigned long long int address) 
+{
 	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
 	unsigned long long int index = (address & index_mask) >> bo_size;
 	bool hit = false;
 	bool write = true;
 	hit = cache->check_addr(index, tag, write);
-	if (cache->vc_hit)
-		cache->vc_hit = false;
+	if (hit)
+		hitCnt++;
+	else {
+		if (cache->vc_hit){
+			cache->vc_hit = false;
+			vc_hit = true;
+			missCnt++;
+		}
+		else {
+			if (cache->dirtyKickout == true)
+			{
+				dirty_kickCnt++;
+				cache->dirtyKickout = false;
+			}
+		}
+	}
 	return;
 }

@@ -86,6 +86,8 @@ int main(int argc, char* argv[])
 	int L1hits = 0;
 	int L2hits = 0;
 	int MMaccess = 0;
+	bool L1hit = false;
+	bool L2hit = false;
 	while (getline(cin, input_line))
 	{
 		op = input_line[0];
@@ -97,12 +99,6 @@ int main(int argc, char* argv[])
 			new_string += input_line[i];
 			++i;
 		}
-		/*
-		for (i = 2; i < 14; i++)
-		{
-			new_string += input_line[i];
-		}
-		*/
 		//converts hex address string to unsigned long long int
 		address = stoull(new_string, nullptr, 16);
 		new_string = "";
@@ -114,30 +110,35 @@ int main(int argc, char* argv[])
 			i++;
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
+		L1hit = false;
+		L2hit = false;
 		//cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
 		if (L1->parseRequest(op, address, bytesize))
 		{
-			L1hits++;
+			L1hit = true;
 		}
 		else if (L1->vc_hit)
 		{
+			L1hit = true;
 			L1->vc_hit = false;
 		}
-		else if (L2->parseRequest(address, bytesize))
-		{
+		if (!L1hit) {
+			if (L2->parseRequest(address, bytesize))
+			{
+				L2hit = true;
+			}
+			else if (L2->vc_hit)
+			{
+				L2->vc_hit = false;
+			}
+			else
+			{
+				MMaccess++;
+			}
 			if (L1->dirtyKickout) {
 				L1->dirtyKickout = false;
 				L2->dirtyWrite(L1->dirtyAddress);
 			}
-			L2hits++;
-		}
-		else
-		{
-			if (L1->dirtyKickout) {
-				L1->dirtyKickout = false;
-				L2->dirtyWrite(L1->dirtyAddress);
-			}
-			MMaccess++;
 		}
 		while (L1->address_overflow)
 		{
@@ -152,11 +153,11 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
+					L2->parseRequest(overflow_address, overflow_bytes);
 					if (L1->dirtyKickout) {
 						L1->dirtyKickout = false;
 						L2->dirtyWrite(L1->dirtyAddress);
 					}
-					L2->parseRequest(overflow_address, overflow_bytes);
 				}
 			}
 		}
@@ -174,6 +175,8 @@ int main(int argc, char* argv[])
 	cout << "L1 inst refs: " << dec << L1->getInstRefs() << endl;
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
+	cout << "L2 kickouts: " << dec << L2->cache->kickouts << endl;
+	cout << "L2 dirty kickouts: " << dec << L2->dirty_kickCnt << endl;
 	delete(L1);
 	delete(L2);
     return 0;
