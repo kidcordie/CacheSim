@@ -97,12 +97,6 @@ int main(int argc, char* argv[])
 			new_string += input_line[i];
 			++i;
 		}
-		/*
-		for (i = 2; i < 14; i++)
-		{
-			new_string += input_line[i];
-		}
-		*/
 		//converts hex address string to unsigned long long int
 		address = stoull(new_string, nullptr, 16);
 		new_string = "";
@@ -115,19 +109,25 @@ int main(int argc, char* argv[])
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
 		//cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
+
+
+		if(op == 'I')
+		{
+		    L1->inst_cnt++;
+		}
 		if (L1->parseRequest(op, address, bytesize))
 		{
 			L1hits++;
 		}
 		else if (L1->vc_hit)
 		{
+		    //time_count++;
 			L1->vc_hit = false;
 		}
 		else
         {
             if (L1->dirtyKickout) //write request to L2
             {
-                //L2->parseRequest('W',L1->dirtyAddress,bytesize);
                 L1->dirtyKickout = false;
                 L2->dirtyWrite(L1->dirtyAddress);
                 if (L2->vc_hit)
@@ -164,6 +164,7 @@ int main(int argc, char* argv[])
 				if (L1->vc_hit)
 				{
 					L1->vc_hit = false;
+					//time_count++;
 				}
 				else
 				{
@@ -176,6 +177,8 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
+	unsigned long long int time_count = L1->wrt_cnt + L2->wrt_cnt + L1->read_cnt + L2->read_cnt + L1->inst_cnt + L2->inst_cnt;
+
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
 	cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
 	cout << "L1_i kickouts: " << dec << L1->i_cache->kickouts << endl;
@@ -190,7 +193,11 @@ int main(int argc, char* argv[])
 	cout << "L2 hits: " << dec << L2->hitCnt << endl;
 	cout << "L2 misses: " << dec << L2->missCnt << endl;
 	cout << "L2 kickouts: " << dec << L2->cache->kickouts << endl;
-	cout << "L2 dirty kickouts: " << dec << L2->dirty_kickCnt << endl;
+	cout << "L2 dirty kickouts: " << dec << L2->dirty_kickCnt << endl << endl;
+	cout << "Total Time: " << dec << time_count << endl;
+	cout << "Read Cycles: " << dec << (L1->read_cnt + L2->read_cnt) << endl;
+	cout << "Write Cycles: " << dec << (L1->wrt_cnt + L2->wrt_cnt) << endl;
+	cout << "Instruction Cycles: " << dec << (L1->inst_cnt + L2->inst_cnt) << endl;
 
 	delete(L1);
 	delete(L2);

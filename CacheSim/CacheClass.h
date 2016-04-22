@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Cache
 {
 public:
@@ -14,6 +15,10 @@ public:
 	unsigned long long int next_address;
 	int next_bytes = 0;
 	LRU* cache;
+	//unsigned long long int time_count;
+	unsigned long long int read_cnt=0;
+	unsigned long long int inst_cnt=0;
+	unsigned long long int wrt_cnt=0;
 protected:
 	int cachesize;
 	int blocksize;
