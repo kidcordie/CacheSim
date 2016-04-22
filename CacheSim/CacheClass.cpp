@@ -323,7 +323,7 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
 
 	if(cache->dirtyKickout == true)
     {
-        wrt_cnt = wrt_cnt + 188;
+        wrt_cnt = wrt_cnt + 188 + 21;
         //time_count = time_count + 180;
         dirty_kickCnt++;
         cache->dirtyKickout = false;
