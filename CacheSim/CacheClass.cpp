@@ -276,6 +276,7 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	if(cache->dirtyKickout == true)
     {
         dirty_kickCnt++;
+        wrt_cnt = wrt_cnt + 188;
         cache->dirtyKickout = false;
     }
 	return hit;
@@ -313,7 +314,7 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
         {
             //no VC hit or L2 hit, add mem access time and L2 and L1 hit replay time
             //time_count = time_count + 188;
-            wrt_cnt = wrt_cnt + 188;
+            //wrt_cnt = wrt_cnt + 8;
         }
         missCnt++;
         //add miss time
@@ -323,7 +324,7 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
 
 	if(cache->dirtyKickout == true)
     {
-        wrt_cnt = wrt_cnt + 188 + 21;
+        wrt_cnt = wrt_cnt + 188;
         //time_count = time_count + 180;
         dirty_kickCnt++;
         cache->dirtyKickout = false;
