@@ -52,9 +52,9 @@ L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt, int mmcs) :Cache(cs,
 
 L1Cache::~L1Cache()
 {
-	std::cout << "Memory Level: L1i" << std::endl;
+	//std::cout << "Memory Level: L1i" << std::endl;
 	delete(i_cache);
-	std::cout << "Memory Level: L1d" << std::endl;
+	//std::cout << "Memory Level: L1d" << std::endl;
 	delete(cache);
 }
 
@@ -103,6 +103,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 				i_cache->vc_hit = false;
 				vc_hit = true;
 				inst_cnt++;
+				i_VChit++;
 			}
 			i_hitCnt += realign(address, bo, bytes) - 1;
 			inst_cnt += realign(address, bo, bytes) - 1;
@@ -138,7 +139,7 @@ bool L1Cache::parseRequest(char ref, unsigned long long int address, unsigned in
                     wrt_cnt++;
                 else
                     read_cnt++;
-				//time_count++;
+                d_VChit++;
 			}
 			d_hitCnt += realign(address, bo, bytes) - 1;
 			if (inst)
@@ -200,7 +201,7 @@ L2Cache::L2Cache(int cs, int bs, int assoc, int ht, int mt, int mmcs, int tt, in
 
 L2Cache::~L2Cache()
 {
-	std::cout << "Memory Level: L2" << std::endl;
+	//std::cout << "Memory Level: L2" << std::endl;
 	delete(cache);
 }
 
@@ -254,6 +255,7 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
                 wrt_cnt = wrt_cnt + 8;
             else
                 read_cnt = read_cnt + 8;
+            L2_VChit++;
         }
         else
         {
