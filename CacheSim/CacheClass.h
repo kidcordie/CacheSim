@@ -19,6 +19,9 @@ public:
 	unsigned long long int read_cnt=0;
 	unsigned long long int inst_cnt=0;
 	unsigned long long int wrt_cnt=0;
+	unsigned long long int i_VChit=0;
+	unsigned long long int d_VChit=0;
+	unsigned long long int L2_VChit=0;
 protected:
 	int cachesize;
 	int blocksize;

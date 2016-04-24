@@ -30,23 +30,23 @@ LRU::~LRU()
 	{
 		dummy = lru_array[i];
 		start = dummy->next;
-		while (start != nullptr) {
+		/*while (start != nullptr) {
 			if (start->valid) {
 				i = i;
 				//std::cout << std::hex << i << ": " << std::hex << start->tag << std::endl;
 			}
 			start = start->next;
-		}
+		}*/
 	}
 	start = vic_dummy->next;
-	std::cout << "VC" << std::endl;
+	/*std::cout << "VC" << std::endl;
 	std::cout << std::dec << vc_trans << std::endl;
 	while (start != nullptr) {
 		if (start->valid) {
 			std::cout << std::hex << start->tag << std::endl;
 		}
 		start = start->next;
-	}
+	}*/
 }
 
 tagNode* LRU::makeVictim()
