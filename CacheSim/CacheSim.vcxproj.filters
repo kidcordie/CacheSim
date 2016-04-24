@@ -19,6 +19,7 @@
     <Text Include="all-small.conf">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="sjeng.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

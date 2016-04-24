@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
 	int tt2 = 10;
 	int bw2 = 16;
 	int mm_chunk_size = 8;
-	if (argc != 2)
+	if (argc != 3)
 	{
-		cout << "usage: please enter config file location at commmand line" << endl;
+		cout << "usage: please enter config file location and output file location at command line" << endl;
 		exit(-1);
 	}
 	string file_location = argv[1];
@@ -210,61 +210,61 @@ int main(int argc, char* argv[])
     */
 
 
-	ofstream outFile (argv[3]);
+	ofstream outFile (argv[2]);
 
 
-	cout << "----------------------------------------------------------------\n";
-    cout << "    " << file_location << "			Simulation Results\n";
-    cout << "----------------------------------------------------------------\n\n";
+	outFile << "----------------------------------------------------------------\n";
+    outFile << "    " << file_location << "			Simulation Results\n";
+    outFile << "----------------------------------------------------------------\n\n";
 
-    cout << "Memory System: \n";
-	cout << "  Dcache size = " << dec << cs1 << " : ways = " <<  assoc1 << " : block size = " << bs1 << endl;
-	cout << "  Icache size = " << dec << cs1 << " : ways = " <<  assoc1 << " : block size = " << bs1 << endl;
-	cout << "  L2-cache size = " << dec << cs2 << " : ways = " << assoc2 << " : block size = " << bs2 << endl;
-	cout << "  Memory ready time = 50 : chunksize = " << dec << mm_chunk_size << " : chunktime = 15\n\n";
+    outFile << "Memory System: \n";
+	outFile << "  Dcache size = " << dec << cs1 << " : ways = " <<  assoc1 << " : block size = " << bs1 << endl;
+	outFile << "  Icache size = " << dec << cs1 << " : ways = " <<  assoc1 << " : block size = " << bs1 << endl;
+	outFile << "  L2-cache size = " << dec << cs2 << " : ways = " << assoc2 << " : block size = " << bs2 << endl;
+	outFile << "  Memory ready time = 50 : chunksize = " << dec << mm_chunk_size << " : chunktime = 15\n\n";
 
-	cout << "Execute time = " << setw(13) << time_count << ";  Total refs = " <<dec << tot_refs << endl;
-	cout << "Inst refs = " << dec << inst_cntr << ";  Data refs = " << dec << wrt_cntr + read_cntr << "\n\n";
+	outFile << "Execute time = " << setw(13) << time_count << ";  Total refs = " <<dec << tot_refs << endl;
+	outFile << "Inst refs = " << dec << inst_cntr << ";  Data refs = " << dec << wrt_cntr + read_cntr << "\n\n";
 
-	cout << "Number of reference types:  [Percentage]\n";
-	cout << "  Reads  = " << setw(12) << dec << read_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(read_cntr)/float(tot_refs)) << "%]\n";
-	cout << "  Writes = " << setw(12) << dec << wrt_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(wrt_cntr)/float(tot_refs)) << "%]\n";
-	cout << "  Inst.  = " << setw(12) << dec << inst_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(inst_cntr)/float(tot_refs)) << "%]\n";
-	cout << "  Total  = " << setw(12) << tot_refs << "\n\n";
+	outFile << "Number of reference types:  [Percentage]\n";
+	outFile << "  Reads  = " << setw(12) << dec << read_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(read_cntr)/float(tot_refs)) << "%]\n";
+	outFile << "  Writes = " << setw(12) << dec << wrt_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(wrt_cntr)/float(tot_refs)) << "%]\n";
+	outFile << "  Inst.  = " << setw(12) << dec << inst_cntr << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(inst_cntr)/float(tot_refs)) << "%]\n";
+	outFile << "  Total  = " << setw(12) << tot_refs << "\n\n";
 
-	cout << "Total cycles for activities:  [Percentage]\n";
-	cout << "  Reads  = " << setw(12) << dec << (L1->read_cnt + L2->read_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->read_cnt + L2->read_cnt)/float(time_count)) << "%]\n";
-	cout << "  Writes = " << setw(12) << dec << (L1->wrt_cnt + L2->wrt_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->wrt_cnt + L2->wrt_cnt)/float(time_count)) << "%]\n";
-	cout << "  Inst.  = " << setw(12) << dec << (L1->inst_cnt + L2->inst_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->inst_cnt + L2->inst_cnt)/float(time_count)) << "%]\n";
-	cout << "  Total  = " << setw(12) << dec << time_count<< "\n\n";
+	outFile << "Total cycles for activities:  [Percentage]\n";
+	outFile << "  Reads  = " << setw(12) << dec << (L1->read_cnt + L2->read_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->read_cnt + L2->read_cnt)/float(time_count)) << "%]\n";
+	outFile << "  Writes = " << setw(12) << dec << (L1->wrt_cnt + L2->wrt_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->wrt_cnt + L2->wrt_cnt)/float(time_count)) << "%]\n";
+	outFile << "  Inst.  = " << setw(12) << dec << (L1->inst_cnt + L2->inst_cnt) << "    [" << setw(4) << setprecision(1) << fixed << 100*(float(L1->inst_cnt + L2->inst_cnt)/float(time_count)) << "%]\n";
+	outFile << "  Total  = " << setw(12) << dec << time_count<< "\n\n";
 
-	cout << "CPI =  " << setprecision(1) << fixed <<float(time_count)/float(inst_cntr) << endl;
-	cout << "Ideal: Exec. Time = " << tot_refs + inst_cntr << ";  CPI =  " << setprecision(1) << fixed << float(tot_refs + inst_cntr)/float(inst_cntr) << endl;
-	cout << "Ideal mis-aligned: Exec. Time = " << dec << misaligned_count << "; CPI =  " << setprecision(1) << fixed << float(misaligned_count)/float(inst_cntr) << "\n\n";
+	outFile << "CPI =  " << setprecision(1) << fixed <<float(time_count)/float(inst_cntr) << endl;
+	outFile << "Ideal: Exec. Time = " << tot_refs + inst_cntr << ";  CPI =  " << setprecision(1) << fixed << float(tot_refs + inst_cntr)/float(inst_cntr) << endl;
+	outFile << "Ideal mis-aligned: Exec. Time = " << dec << misaligned_count << "; CPI =  " << setprecision(1) << fixed << float(misaligned_count)/float(inst_cntr) << "\n\n";
 
-	cout << "Memory Level: L1i\n";
-	cout << "  Hit Count = " <<  L1->i_hitCnt << "   Miss Count = " << L1->i_missCnt << endl;
-	cout << "  Total requests = " << L1->i_hitCnt+L1->i_missCnt << endl;
-	cout << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L1->i_hitCnt)/float(L1->i_hitCnt+L1->i_missCnt)) << "%     Miss rate =  " << setprecision(1) << fixed << 100*(float(L1->i_missCnt)/float(L1->i_hitCnt+L1->i_missCnt)) << "%\n";
-	cout << "  Kickouts = " << dec << L1->i_cache->kickouts << "; Dirty kickouts = " << dec << L1->i_dirty_kickCnt << "; Transfers = " << L1->i_missCnt - L1->i_VChit << endl;
-	cout << "  VC Hit count = " << L1->i_VChit << "\n\n";
+	outFile << "Memory Level: L1i\n";
+	outFile << "  Hit Count = " <<  L1->i_hitCnt << "   Miss Count = " << L1->i_missCnt << endl;
+	outFile << "  Total requests = " << L1->i_hitCnt+L1->i_missCnt << endl;
+	outFile << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L1->i_hitCnt)/float(L1->i_hitCnt+L1->i_missCnt)) << "%     Miss rate =  " << setprecision(1) << fixed << 100*(float(L1->i_missCnt)/float(L1->i_hitCnt+L1->i_missCnt)) << "%\n";
+	outFile << "  Kickouts = " << dec << L1->i_cache->kickouts << "; Dirty kickouts = " << dec << L1->i_dirty_kickCnt << "; Transfers = " << L1->i_missCnt - L1->i_VChit << endl;
+	outFile << "  VC Hit count = " << L1->i_VChit << "\n\n";
 
-	cout << "Memory Level: L1d\n";
-	cout << "  Hit Count = " << dec << L1->d_hitCnt << "     Miss Count = " << L1->d_missCnt << endl;
-	cout << "  Total requests = " << dec << (L1->d_hitCnt+L1->d_missCnt) << endl;
-	cout << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L1->d_hitCnt)/float(L1->d_hitCnt+L1->d_missCnt)) << "%     Miss rate = " << setprecision(1) << fixed << 100*(float(L1->d_missCnt)/float(L1->d_hitCnt+L1->d_missCnt)) << "%\n";
-	cout << "  Kickouts = " << dec << L1->cache->kickouts << "; Dirty kickouts = " << dec << L1->d_dirty_kickCnt << "; Transfers = " << L1->d_missCnt - L1->d_VChit << endl;
-	cout << "  VC Hit count = "  << L1->d_VChit << "\n\n";
+	outFile << "Memory Level: L1d\n";
+	outFile << "  Hit Count = " << dec << L1->d_hitCnt << "     Miss Count = " << L1->d_missCnt << endl;
+	outFile << "  Total requests = " << dec << (L1->d_hitCnt+L1->d_missCnt) << endl;
+	outFile << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L1->d_hitCnt)/float(L1->d_hitCnt+L1->d_missCnt)) << "%     Miss rate = " << setprecision(1) << fixed << 100*(float(L1->d_missCnt)/float(L1->d_hitCnt+L1->d_missCnt)) << "%\n";
+	outFile << "  Kickouts = " << dec << L1->cache->kickouts << "; Dirty kickouts = " << dec << L1->d_dirty_kickCnt << "; Transfers = " << L1->d_missCnt - L1->d_VChit << endl;
+	outFile << "  VC Hit count = "  << L1->d_VChit << "\n\n";
 
-	cout << "Memory Level: L2\n";
-	cout << "  Hit Count = " << dec << L2->hitCnt << "     Miss Count = " << dec << L2->missCnt << endl;
-	cout << "  Total requests = " << L2->hitCnt + L2->missCnt << "" << endl;
-	cout << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L2->hitCnt)/float(L2->hitCnt+L2->missCnt)) << "%     Miss rate =  " << setprecision(1) << fixed << 100*(float(L2->missCnt)/float(L2->hitCnt+L2->missCnt)) << "%\n";
-	cout << "  Kickouts = " << dec << L2->cache->kickouts << "; Dirty kickouts = " << dec << L2->dirty_kickCnt << "; Transfers = " << L2->missCnt - L2->L2_VChit << endl;
-	cout << "  VC Hit count = " << L2->L2_VChit << "\n\n";
+	outFile << "Memory Level: L2\n";
+	outFile << "  Hit Count = " << dec << L2->hitCnt << "     Miss Count = " << dec << L2->missCnt << endl;
+	outFile << "  Total requests = " << L2->hitCnt + L2->missCnt << "" << endl;
+	outFile << "  Hit Rate = " << dec << setprecision(1) << fixed << 100*(float(L2->hitCnt)/float(L2->hitCnt+L2->missCnt)) << "%     Miss rate =  " << setprecision(1) << fixed << 100*(float(L2->missCnt)/float(L2->hitCnt+L2->missCnt)) << "%\n";
+	outFile << "  Kickouts = " << dec << L2->cache->kickouts << "; Dirty kickouts = " << dec << L2->dirty_kickCnt << "; Transfers = " << L2->missCnt - L2->L2_VChit << endl;
+	outFile << "  VC Hit count = " << L2->L2_VChit << "\n\n";
 
-	cout << "L1 cache cost (Icache $" << dec << single_L1cache_cost << ") + (Dcache $" << dec << single_L1cache_cost << ") = $" << 2*single_L1cache_cost << endl;
-	cout << "L2 cache cost = $" << dec << cache_costL2 << ";  Memory cost = $" << dec << mem_cost << " Total cost = $" << dec << 2*single_L1cache_cost + cache_costL2 + mem_cost << endl;
+	outFile << "L1 cache cost (Icache $" << dec << single_L1cache_cost << ") + (Dcache $" << dec << single_L1cache_cost << ") = $" << 2*single_L1cache_cost << endl;
+	outFile << "L2 cache cost = $" << dec << cache_costL2 << ";  Memory cost = $" << dec << mem_cost << " Total cost = $" << dec << 2*single_L1cache_cost + cache_costL2 + mem_cost << endl;
 
 
 	outFile.close();

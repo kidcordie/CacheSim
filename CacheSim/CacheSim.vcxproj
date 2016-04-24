@@ -140,6 +140,7 @@
   <ItemGroup>
     <Text Include="ReadMe.txt" />
     <Text Include="all-small.conf" />
+    <Text Include="sjeng.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CacheClass.h" />
