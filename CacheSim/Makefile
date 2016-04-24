@@ -20,4 +20,4 @@ stdafx.o : stdafx.h stdafx.cpp
 	$(CC) $(CFLAGS) stdafx.cpp
 
 clean:
-	\rm *.o *~ CacheSim
+	\rm *.o CacheSim
