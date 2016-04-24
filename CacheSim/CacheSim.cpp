@@ -111,8 +111,6 @@ int main(int argc, char* argv[])
 			i++;
 		}while (input_line[i] != '\0' && !isspace(input_line[i]));
 		bytesize = stoi(new_string);
-		//cout << "\n" << op << " " << hex << address << " " << bytesize << endl;
-
 
 		if(op == 'I')
 		{
@@ -164,6 +162,9 @@ int main(int argc, char* argv[])
 		}
 	}
 	unsigned long long int time_count = L1->wrt_cnt + L2->wrt_cnt + L1->read_cnt + L2->read_cnt + L1->inst_cnt + L2->inst_cnt;
+    int single_L1cache_cost = (cs1/4096)*100*(log2f(assoc1)) + 100*(cs1/4096);
+    int cache_costL2 = (cs2/16384)*50*(log2f(assoc2)) + 50*(cs2/16384);
+    int mem_cost = 75 + 100*(log2f(mm_chunk_size) - 3);
 
 	cout << endl << "L1_i hits: " << dec << L1->i_hitCnt << endl;
 	cout << "L1_i misses: " << dec << L1->i_missCnt << endl;
@@ -184,7 +185,11 @@ int main(int argc, char* argv[])
 	cout << "Total Time: " << dec << time_count << endl;
 	cout << "Read Cycles: " << dec << (L1->read_cnt + L2->read_cnt) << endl;
 	cout << "Write Cycles: " << dec << (L1->wrt_cnt + L2->wrt_cnt) << endl;
-	cout << "Instruction Cycles: " << dec << (L1->inst_cnt + L2->inst_cnt) << endl;
+	cout << "Instruction Cycles: " << dec << (L1->inst_cnt + L2->inst_cnt) << endl << endl;
+
+	cout << "L1i cost: $" << dec << single_L1cache_cost << endl;
+	cout << "L2 cost: $" << dec << cache_costL2 << endl;
+	cout << "Memory cost: $" << dec << mem_cost << endl;
 
 	delete(L1);
 	delete(L2);
