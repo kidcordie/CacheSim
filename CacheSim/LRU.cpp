@@ -83,6 +83,7 @@ void LRU::mov_tagNode(tagNode* current, tagNode* dummy)
 	dummy->next = current;
 	current->next = tmp;
 }
+
 //takes a given index and traverses through LRU looking for given tag. Returns true for hit and false for miss
 //also looks through victim cache
 bool LRU::check_addr(unsigned long long int index, unsigned long long int in_tag, bool write, unsigned long long int bo)

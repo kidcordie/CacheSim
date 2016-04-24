@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
             if (L1->dirtyKickout) //write request to L2
             {
                 L1->dirtyKickout = false;
-                L2->dirtyWrite(L1->dirtyAddress);
+                L2->dirtyWrite(op, L1->dirtyAddress);
                 if (L2->vc_hit)
                     L2->vc_hit = false;
             }
@@ -138,22 +138,6 @@ int main(int argc, char* argv[])
                 L2hits++;
             }
 		}
-		/*else if (L2->parseRequest(op,address, bytesize))
-		{
-			if (L1->dirtyKickout) {
-				L1->dirtyKickout = false;
-				L2->dirtyWrite(L1->dirtyAddress);
-			}
-			L2hits++;
-		}
-		else
-		{
-			if (L1->dirtyKickout) {
-				L1->dirtyKickout = false;
-				L2->dirtyWrite(L1->dirtyAddress);
-			}
-			MMaccess++;
-		}*/
 		while (L1->address_overflow)
 		{
 			L1->address_overflow = false;
@@ -169,7 +153,7 @@ int main(int argc, char* argv[])
 				{
 					if (L1->dirtyKickout) {
 						L1->dirtyKickout = false;
-						L2->dirtyWrite(L1->dirtyAddress);
+						L2->dirtyWrite(op, L1->dirtyAddress);
 					}
 					L2->parseRequest(op,overflow_address, overflow_bytes);
 				}

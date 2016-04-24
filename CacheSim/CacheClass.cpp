@@ -276,13 +276,19 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
 	if(cache->dirtyKickout == true)
     {
         dirty_kickCnt++;
-        wrt_cnt = wrt_cnt + 188;
+		if (ref == 'I')
+			inst_cnt = inst_cnt + 180;
+		else if (ref == 'W')
+			wrt_cnt = wrt_cnt + 180;
+		else
+			read_cnt = read_cnt + 180;
+        //wrt_cnt = wrt_cnt + 180;
         cache->dirtyKickout = false;
     }
 	return hit;
 }
 
-void L2Cache::dirtyWrite(unsigned long long int address) {
+void L2Cache::dirtyWrite(char ref, unsigned long long int address) {
 	unsigned long long int tag = (address & tag_mask) >> (bo_size + index_size);
 	unsigned long long int index = (address & index_mask) >> bo_size;
 	bool hit = false;
@@ -292,13 +298,19 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
 	hit = cache->check_addr(index, tag, write, bo);
 	//add transfer time between L1 and L2 plus L1 replay time
 	//time_count = time_count + 21;
-	wrt_cnt = wrt_cnt + 21;
+	if (ref == 'W')
+		wrt_cnt = wrt_cnt + 20;
+	else
+		read_cnt = read_cnt + 20;
 	if (hit)
     {
         hitCnt++;
         //add L2 hit time
         //time_count = time_count + 8;
-        wrt_cnt = wrt_cnt + 8;
+		if (ref == 'W')
+			wrt_cnt = wrt_cnt + 8;
+		else
+			read_cnt = read_cnt + 8;
     }
     else
     {
@@ -308,23 +320,35 @@ void L2Cache::dirtyWrite(unsigned long long int address) {
             vc_hit = true;
             //add replay time
             //time_count = time_count + 8;
-            wrt_cnt = wrt_cnt + 8;
+			if (ref == 'W')
+				wrt_cnt = wrt_cnt + 8;
+			else
+				read_cnt = read_cnt + 8;
         }
         else
         {
             //no VC hit or L2 hit, add mem access time and L2 and L1 hit replay time
             //time_count = time_count + 188;
-            //wrt_cnt = wrt_cnt + 8;
+			if (ref == 'W')
+				wrt_cnt = wrt_cnt + 188;
+			else
+				read_cnt = read_cnt + 188;
         }
         missCnt++;
         //add miss time
         //time_count = time_count + 10;
-        wrt_cnt = wrt_cnt + 10;
+		if (ref == 'W')
+			wrt_cnt = wrt_cnt + 10;
+		else
+			read_cnt = read_cnt + 10;
     }
 
 	if(cache->dirtyKickout == true)
     {
-        wrt_cnt = wrt_cnt + 188;
+		if (ref == 'W')
+			wrt_cnt = wrt_cnt + 180;
+		else
+			read_cnt = read_cnt + 180;
         //time_count = time_count + 180;
         dirty_kickCnt++;
         cache->dirtyKickout = false;
