@@ -11,7 +11,7 @@ CacheSim.o : stdafx.h CacheSim.cpp
 	$(CC) $(CFLAGS) CacheSim.cpp
 
 CacheClass.o : CacheClass.h CacheClass.cpp stdafx.h
-	$(CC) $(CFLAGS) NameList.cpp
+	$(CC) $(CFLAGS) CacheClass.cpp
 
 LRU.o : LRU.h LRU.cpp
 	$(CC) $(CFLAGS) LRU.cpp
