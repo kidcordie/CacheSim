@@ -1,6 +1,6 @@
 OBJS = CacheSim.o CacheClass.o LRU.o stdafx.o
 CC = g++
-DEBUG = -g
+DEBUG = -g -std=c++11
 CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
