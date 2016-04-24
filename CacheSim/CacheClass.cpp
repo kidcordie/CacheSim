@@ -1,13 +1,14 @@
 #include "stdafx.h"
 
 
-Cache::Cache(int cs, int bs, int assoc, int ht, int mt)
+Cache::Cache(int cs, int bs, int assoc, int ht, int mt, int mmcs)
 {
 	cachesize = cs;
 	blocksize = bs;
 	associativity = assoc;
 	hittime = ht;
 	misstime = mt;
+	mm_chunk_size = mmcs;
 	//subtract 1 because it takes size-1 bits to represent the size
 	index_size = int(log2f(cs/(bs*associativity)));
 	bo_size = int(log2f(bs));
@@ -43,7 +44,7 @@ int Cache::getMissTime()
 };
 
 
-L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt) :Cache(cs, bs, assoc, ht, mt)
+L1Cache::L1Cache(int cs, int bs, int assoc, int ht, int mt, int mmcs) :Cache(cs, bs, assoc, ht, mt, mmcs)
 {
 	buswidth = 4;
 	i_cache = new LRU(cs, associativity, index_size, bo_size);
@@ -190,10 +191,11 @@ int L1Cache::realign(unsigned long long int address, unsigned int bo, unsigned i
 	return transfers;
 }
 
-L2Cache::L2Cache(int cs, int bs, int assoc, int ht, int mt, int tt, int bw) :Cache(cs, bs, assoc, ht, mt)
+L2Cache::L2Cache(int cs, int bs, int assoc, int ht, int mt, int mmcs, int tt, int bw) :Cache(cs, bs, assoc, ht, mt, mmcs)
 {
 	transfertime = tt;
 	buswidth = bw;
+	mm_transfer_time = 10 + 50 + (15 * (64 / mm_chunk_size));
 }
 
 L2Cache::~L2Cache()
@@ -258,11 +260,11 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
             //no VC hit or L2 hit, add mem access time and L2 and L1 hit replay time
             //time_count = time_count + 188;
             if (ref == 'I')
-                inst_cnt = inst_cnt + 188;
+                inst_cnt += mm_transfer_time + 8;
             else if (ref == 'W')
-                wrt_cnt = wrt_cnt + 188;
+                wrt_cnt += mm_transfer_time + 8;
             else
-                read_cnt = read_cnt + 188;
+                read_cnt += mm_transfer_time + 8;
         }
         //time_count = time_count + 10;
         if (ref == 'I')
@@ -277,11 +279,11 @@ bool L2Cache::parseRequest(char ref, unsigned long long int address, unsigned in
     {
         dirty_kickCnt++;
 		if (ref == 'I')
-			inst_cnt = inst_cnt + 180;
+			inst_cnt += mm_transfer_time;
 		else if (ref == 'W')
-			wrt_cnt = wrt_cnt + 180;
+			wrt_cnt += mm_transfer_time;
 		else
-			read_cnt = read_cnt + 180;
+			read_cnt += mm_transfer_time;
         //wrt_cnt = wrt_cnt + 180;
         cache->dirtyKickout = false;
     }
@@ -330,9 +332,9 @@ void L2Cache::dirtyWrite(char ref, unsigned long long int address) {
             //no VC hit or L2 hit, add mem access time and L2 and L1 hit replay time
             //time_count = time_count + 188;
 			if (ref == 'W')
-				wrt_cnt = wrt_cnt + 188;
+				wrt_cnt += mm_transfer_time + 8;
 			else
-				read_cnt = read_cnt + 188;
+				read_cnt += mm_transfer_time + 8;
         }
         missCnt++;
         //add miss time
@@ -346,9 +348,9 @@ void L2Cache::dirtyWrite(char ref, unsigned long long int address) {
 	if(cache->dirtyKickout == true)
     {
 		if (ref == 'W')
-			wrt_cnt = wrt_cnt + 180;
+			wrt_cnt += mm_transfer_time;
 		else
-			read_cnt = read_cnt + 180;
+			read_cnt += mm_transfer_time;
         //time_count = time_count + 180;
         dirty_kickCnt++;
         cache->dirtyKickout = false;

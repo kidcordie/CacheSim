@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
 	int mt2 = 10;
 	int tt2 = 10;
 	int bw2 = 16;
+	int mm_chunk_size = 8;
 	if (argc != 2)
 	{
 		cout << "usage: please enter config file location at commmand line" << endl;
@@ -66,6 +67,8 @@ int main(int argc, char* argv[])
 						tt2 = stoi(value);
 					else if (key == "L2_bus_width")
 						bw2 = stoi(value);
+					else if (key == "MM_chunk_size")
+						mm_chunk_size = stoi(value);
 					else
 						cout << "no key found " << key << endl;
 				}
@@ -73,8 +76,8 @@ int main(int argc, char* argv[])
 		}
 	}
 	conf_file.close();
-	L1Cache* L1 = new L1Cache(cs1, bs1, assoc1, ht1, mt1);
-	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, tt2, bw2);
+	L1Cache* L1 = new L1Cache(cs1, bs1, assoc1, ht1, mt1, mm_chunk_size);
+	L2Cache* L2 = new L2Cache(cs2, bs2, assoc2, ht2, mt2, mm_chunk_size, tt2, bw2);
 	char op;
 	unsigned long long int address;
 	unsigned long long int overflow_address;
